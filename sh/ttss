@@ -1,0 +1,4 @@
+a=1
+b="hi"
+echo $a
+echo $b

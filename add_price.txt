@@ -1,0 +1,5 @@
+l_money = fo_money             # 60500 , 120500 금액 제한 (종목당 보유금액( 보유금액의 2배까지 증가 가능)
+fi_money = 20100; fi_m = fi_money - (fi_money * 0.01)           # 10100 , 20100(19899)  (-1%)         
+se_money = 60300; se_m = se_money - (se_money * 0.01)           # 30200 , 60200(59697) (-1%)
+th_money = 180900; th_m = th_money - (th_money * 0.01)          # 60300 , 120300(179091) (-1%)
+fo_money = 542000; fo_m = fo_money - (fo_money * 0.01)          # 542000 ,.... (536580) (-1%)

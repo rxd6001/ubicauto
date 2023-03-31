@@ -1,0 +1,41 @@
+var renew_url = "/" + para[3] + "/ubic_bal";      // ajax를 사용해 테이블을 갱신, 새로운 페이지 생성 후 갱신
+var op = setInterval(function() {     // table을 갱신
+  $.ajax({
+    url: renew_url,
+    // url : "/ubic1/ubic_bal",
+    //headers: {'X-CSRFToken': csrftoken,},
+    type: 'POST',     // 전송방식 'POST' 지정
+    //contentType: 'application/x-www-form-urlencode; charset=UTF-8',
+    dataType: 'html',     // 데이터 타입 지정
+    data : {
+        data: "AJAX",
+    },
+    success: function (rdata) {
+        const obj = JSON.parse(rdata);      // json 문자열 구문 분석?
+        const active_td = $(".font-red");     // 객체를 가저옴
+
+        try {     // 예외처리
+          // alert(para);
+          // const elements = document.querySelectorAll("tr:nth-child(odd)");      // 1행씩 색상 반전 적용된 부분
+          const elements = document.querySelectorAll("tr");      // 1행씩 색상 반전 적용된 부분
+          // alert(elements);
+          if ( para[3] == 'ubic1' ) {
+            elements[0].style.backgroundColor = "#aed4e4";
+            
+          } else if ( para[3] == 'ubic2' ) {
+            elements[0].style.backgroundColor = "#d3c3ff";
+          } else if ( para[3] == 'ubic3' ) {      // ubic3 일 경우 배경 색 설정
+            elements[0].style.backgroundColor = "#e9c4bb";
+          }
+        } catch (e) {
+          alert(e);
+        }
+        
+        
+    },
+    error: function (rdata) {
+        alert("ajax 통신실패");
+        location.href = "/"
+    }
+  })
+}, 1000);

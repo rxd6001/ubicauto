@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width maximum-scale=1.2 minimum-scale=0.5 user-scalable=yes" /> 
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/friend.ico') }}"/>
+    <title> UBiCauto </title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ubic.css') }}"/>
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- 차트 Resources 부분 -->
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.3.3/dist/echarts.min.js"></script>
+  </head>
+  
+  <body>
+    <script>
+      function change_btn_color() {     /* 하단버튼 색상 변경 설정 */
+        {% if session['id'] == 'butysoo' or session['id'] == 'liebe' %}
+          $(".flex-container3_1").css("height", "580px");
+          $(".flex-item3_1").css("height", "580px");
+          // $(".flex-item.center").css("align-items", "flex-start");
+          // alert($(".flex-container3_1").css("height"));
+        {% endif %}
+
+        var para = document.location.href.split("/");  
+
+        if ( para[3] == 'ubic1' ) {
+          try { // common
+            document.getElementById('acc_move1').style.backgroundColor = "#aed4e4";
+            document.getElementById('acc_move1').style.color = "#ffffff";
+            document.getElementById('acc_move2').style.backgroundColor = "#ffffff";
+            document.getElementById('acc_move2').style.color = "#d3c3ff";
+            document.getElementById('acc_move3').style.backgroundColor = "#ffffff";
+            document.getElementById('acc_move3').style.color = "#e9c4bb";
+          } catch {}
+        } else if ( para[3] == 'ubic2' ) {
+          try { // common
+            document.getElementById('acc_move1').style.backgroundColor = "#ffffff";
+            document.getElementById('acc_move1').style.color = "#aed4e4";
+            document.getElementById('acc_move2').style.backgroundColor = "#d3c3ff";
+            document.getElementById('acc_move2').style.color = "#ffffff";
+            document.getElementById('acc_move3').style.backgroundColor = "#ffffff";
+            document.getElementById('acc_move3').style.color = "#e9c4bb";
+          } catch {}
+        } else if ( para[3] == 'ubic3' ) {
+          try { // common
+            document.getElementById('acc_move1').style.backgroundColor = "#ffffff";
+            document.getElementById('acc_move1').style.color = "#aed4e4";
+            document.getElementById('acc_move2').style.backgroundColor = "#ffffff";
+            document.getElementById('acc_move2').style.color = "#d3c3ff";
+            document.getElementById('acc_move3').style.backgroundColor = "#e9c4bb";
+            document.getElementById('acc_move3').style.color = "#ffffff";
+          } catch {}
+        };
+      }
+      // 페이지 처음 시작 시 날짜 및 시간 표시, 'id=now' 실행 줄 연동
+      date = new Date();
+      year = date.getFullYear();
+      // month = date.getMonth() + 1;
+      // day = date.getDate();
+      month = String(date.getMonth() + 1).padStart(2, "0");
+      day = String(date.getDate()).padStart(2, "0");
+      hour = String(date.getHours()).padStart(2, "0");      // 시간표시 자릿수 2자리
+      minute = String(date.getMinutes()).padStart(2, "0");
+      second = String(date.getSeconds()).padStart(2, "0");
+      
+    </script>
+    <div class="ubtop">
+      <span>
+        <b>
+          &nbsp; &nbsp;🍀&nbsp; UBiCauto CM View &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 📆 &nbsp;
+        </b>
+      </span>
+      <span id="now">
+      </span>
+      <script>
+        document.getElementById("now").innerHTML = year + "년" + month + "월" + day + "일 " + hour + ":" + minute + ":" + second;
+      </script>
+    </div>
+
+    <div class="ubbody">
+        <!--각 페이지 콘텐츠 출력 영역-->
+        {% block content %}{% endblock %}
+        {% block content_signup %}{% endblock %}
+        {% block content_conf %}{% endblock %}
+        {% block content_bal %}{% endblock %}
+        {% block content_ear %}{% endblock %}
+        {% block content_mear %}{% endblock %}
+        {% block content_reps %}{% endblock %}
+        {% block content_thty %}{% endblock %}
+    </div>
+
+    <div class = "ubfooter">
+      <!--하단 카피라이트 영역-->
+      &nbsp Copyright 2021. SHoA_KTU All Rights Reserved.&nbsp🍀
+    </div>
+  </body>
+</html>

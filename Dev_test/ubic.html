@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content %}
+{% if session['id'] == 'zenka' or session['id'] == 'butysoo' or session['id'] == 'liebe' %}
+<html>
+  <head>
+    <meta charset="UTF-8"> 
+    <script type=text/javascript>
+      window.onload = function() {
+        var para = document.location.href.split("/");        
+        // alert(para);
+        
+        if ( para[3] == 'ubic2' ) {          
+          document.getElementById("bal_l").style.backgroundColor = "#bcaee4a9";
+          document.getElementById("bal_c").style.backgroundColor = "#bcaee4a9";
+          document.getElementById("bal").style.backgroundColor = "#bcaee4a9";
+          document.getElementById("acc_name").innerHTML = "&nbsp butysoo &nbsp";
+          document.getElementById("acc_move1").style.backgroundColor = "#ffffff";
+          document.getElementById("acc_move1").style.color = "#1a8dbb";
+          document.getElementById("acc_move2").style.backgroundColor = "#bcaee4";
+          document.getElementById("acc_move2").style.color = "#ffffff";
+
+        } else if ( para[3] == 'ubic3' ) {  
+          document.getElementById("bal_l").style.backgroundColor = "#e4b4ae9f";
+          document.getElementById("bal_c").style.backgroundColor = "#e4b4ae9f";        
+          document.getElementById("bal").style.backgroundColor = "#e4b4ae9f";
+          document.getElementById("acc_name").innerHTML = "&nbsp liebe &nbsp";
+          document.getElementById("acc_move1").style.backgroundColor = "#ffffff";
+          document.getElementById("acc_move1").style.color = "#1a8dbb";
+          document.getElementById("acc_move3").style.backgroundColor = "#e4b4ae";
+          document.getElementById("acc_move3").style.color = "#ffffff";
+        };
+      }
+
+      function page_move(obj){
+        var para = document.location.href.split("/");
+        var url1 = "/" + para[3]
+        var url2 = "/" + para[3] + "/ubic_ear";
+        var url3 = "/" + para[3] + "/ubic_mear";
+        var url4 = "/" + para[3] + "/ubic_bal";
+        var url5 = "/" + para[3] + "/ubic_conf";
+        // alert(url5);
+        // var itag = document.getElementById("config").value;
+        // var getclick_id = $(this).attr('id');
+        // var cont_tmp = obj.innerHTML.split('<b>')[1];
+        // var cont = cont_tmp.split('</b>')[0];
+        // alert(obj);
+        // alert(cont);
+        // if ( cont == "자산정보" ){
+          if ( obj == "bal" ){
+          location.href = url1;
+        } else if ( obj == "ear" ) {
+          location.href = url2;
+        } else if ( obj == "mear" ) {
+          location.href = url3;
+        } else if ( obj == "m" ) {
+          location.href = url4;
+        } else if ( obj == "config" ) {
+          location.href = url5;
+        }        
+      }
+
+      </script>
+      <style TYPE="text/css">
+
+      </style>
+  </head>
+  
+
+  <body>
+    <div class="flex-container">
+      <div class="flex-item">item 1</div>  
+      <div class="flex-item" " align="left">
+        <a href='{{ url_for('logout') }}' style="text-decoration:none;">
+          <button id = "acc_logout" style="border-radius: 12px; width: 48px; height: 32px; background-color:#ffffff!important; color: #1a8dbb; padding: 0.2px 2px 0.2px 2px; cursor: pointer;">
+            <font size="1em">
+              <p style="line-height:1px;"><b>UBiCat</b></p>
+              <p style="line-height:1px;">로그아웃</p>
+            </font>
+          </button>
+        </a>
+      </div>
+  
+      <div id="ubbutton1" align="left">
+        <button id="bal" onclick="page_move(this.id);" style="border-radius: 5px; background-color:#aed4e4!important; color: #ffffff; line-height:80%; padding: 2px 8px 2px 8px; cursor: pointer;">
+          <font size="3em">
+            <b>자산정보</b>
+          </font>
+        </button>
+  
+        <button id="ear" onclick="page_move(this.id);" style="border-radius: 5px; background-color:#ffffff!important; color: #1a2abb; line-height:80%; padding: 2px 8px 2px 8px; cursor: pointer;">
+          <font size="3em">
+            <b>일별내역</b>
+          </font>
+        </button>
+        <button id="mear" onclick="page_move(this.id);" style="border-radius: 5px; background-color:#ffffff!important; color: #1a2abb; line-height:80%; padding: 2px 8px 2px 8px; cursor: pointer;">
+          <font size="3em">
+            <b>월별내역</b>
+          </font>
+        </button>&nbsp; &nbsp;
+        <button id="m" onclick="page_move(this.id);" style="border-radius: 8px; background-color:#ffffff!important; color: #1a2abb; line-height:80%; padding: 3px 5px 3px 5px; cursor: pointer;">
+          <font size="2em">
+            <b>M</b>
+          </font>
+        </button>
+      </div>
+    </div>
+    </div>
+    <div class="flex-container">
+      <div class="flex-item">item 1</div>  
+    </div>
+    <div class="flex-container">
+      <div class="flex-item">item 1</div>  
+    </div>
+    <div class="flex-container">
+      <div class="flex-item">item 1</div>  
+    </div>
+    <div id="ubbutton" align="left">
+
+    <div id="ubmid_table0">
+      <font size="5em">               <!-- 제목 자산정보 폰트 크기⟃𖢨⟄ꕥ⊚𖣐⦿⨀𑁍❉❋֎✇ꕥઇଓ -->
+          <b style="color: #000000a9;">◇</b>
+          <b id="acc_name" style="color: #4aa861e3;">&nbsp zekny&nbsp </b> 
+          <b style="color: #000000a9;"> 자산 정보&nbsp </b>                
+          <span id= "config" style="font-size: 30px;" onclick="page_move(this.id);" >⎆</span>                
+      </font>
+      <!-- <table width="390" height="495"> -->
+        <table>
+        <tr>
+              <th id="bal_l">목록</th>
+              <th id="bal_c">내용</th>
+        </tr>
+
+        {% for key, value in mycalt_info.items() %}
+          {% if key in keyname1 %}
+            <tr>                
+              <td align="center" > {{ key }} </td>
+              <td id="td1" align="right" > {{ value }} 원 </td>
+            </tr>
+          {% endif %}
+                  
+          {% if key in keyname2 %}
+            <tr>                  
+                <td align="center"> {{ key }} </td>
+                <td id="td2" align="right"> {{ value }} </td>                  
+            </tr>
+          {% endif %}
+
+          {% if key == '보유종목수' %}
+            <tr>                  
+                <td align="center" > {{ key }} </td>
+                <td id="td3" align="right" > {{ value }}  종목 </td>                  
+            </tr>
+          {% endif %}
+          {% if key == '매도횟수' %}
+            <tr>                  
+              <td align="center"> {{ key }} </td>
+              <td id="td4" align="right"> {{ value }} 회 </td>
+            </tr>
+          {% endif %}
+        {% endfor %}                  
+
+
+        {% for key, value in add_cnt.items() %}
+        {% if key == '추매횟수' %}
+        {% if session['id'] == 'zenka' %}
+          <tr>
+            <td width="110" height="45" align="center"> {{ key }} </td>
+            <td id="td5" style="font-size:0.8em;" align="right"> {{ value }} </td>
+          </tr>
+        {% endif %}
+        {% else %}
+          <tr>
+            <td width="110" height="45" align="center"> {{ key }} </td>
+            <td id="td5" style="font-size:0.8em;" align="right"> {{ value }} </td>
+          </tr>
+        {% endif %}
+        {% endfor %}
+      </table>
+    </div>
+
+    {% if session['id'] == 'zenka' %}
+      <div id="ubbot1">
+        <a href='/ubic1' style="text-decoration:none;">
+          <button id = "acc_move1" style="border-radius: 15px; background-color:#aed4e4!important; color: #ffffff; line-height:100%; padding: 2px 10px 2px 10px; cursor: pointer;">
+          <!-- <button onClick="acyncMovePage()" style="border-radius: 15px; background-color:#aed4e4!important; color: #ffffff; line-height:120%; padding: 2px 10px 2px 10px; cursor: pointer;"> -->
+            <font size="3em">
+              <b>
+                Zenky
+              </b>
+            </font>
+          </button>&nbsp;
+        </a>&nbsp;  
+        <a href='/ubic2' style="text-decoration:none;">
+          <button id = "acc_move2" style="border-radius: 15px; background-color:#ffffff!important; color: #801abb; line-height:100%; padding: 2px 10px 2px 10px; cursor: pointer;">
+          <!-- <button onClick="acyncMovePage_butys()" style="border-radius: 10px; background-color:#ffffff!important; color: #801abb; line-height:100%; padding: 2px 10px 2px 10px; cursor: pointer;"> -->
+            <font size="3em">
+              <b>
+                Butys
+              </b>
+            </font>
+          </button>&nbsp;
+        </a>&nbsp;  
+        <a href='/ubic3' style="text-decoration:none;">
+          <button id = "acc_move3" style="border-radius: 15px; background-color:#ffffff!important; color: #bb2d1a; line-height:100%; padding: 2px 10px 2px 10px; cursor: pointer;">
+          <!-- <button onClick="acyncMovePage_liebe()" style="border-radius: 10px; background-color:#ffffff!important; color: #bb2d1a; line-height:100%; padding: 2px 10px 2px 10px; cursor: pointer;"> -->
+            <font size="3em">
+              <b>
+                Liebe
+              </b>
+            </font>
+          </button>
+        </a> &nbsp;
+      </div>
+
+    {% else %}
+      <div id="ubbot2">      
+        <button onClick="window.location.reload()" style="border-radius: 15px; line-height:100%; background-color:#ffffff!important; color: #801abb; padding: 3px 20px 3px 20px; cursor: pointer;">
+          <font size="3em">
+            새로 <i class="xi-refresh"></i> 고침
+          </font>
+        </button>
+      </div>
+    {% endif %}
+  </body>
+</html>
+{% else %}
+<script>
+  alert("잘못된 페이지입니다");
+  window.location = "/error/500";
+</script>
+{% endif %}
+{% endblock %}

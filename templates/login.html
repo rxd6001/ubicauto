@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content %}
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+  </head>
+
+  <body>
+    <div class="login_sub center font4">
+      <div class="login-item">
+        <b>
+          UBiCauto
+        </b>
+      </div>
+    </div>
+
+    <form id="id" action="/login" method="post">
+      <div class="login flex-start center">
+        내아이디 : &nbsp;<input style="height: 20px;" type="text" name="id_" placeholder="Username " required>
+      </div>
+      <div class="login center">
+        패스워드 : &nbsp;<input style="height: 20px;" type="password" name="pw_" placeholder="Password" required>
+      </div>
+      <div class="login center">
+        <span id="log_mesg" style="color: #ff000078">로그인이 필요합니다!!</span>
+      </div>
+      <div class="login center space-around">
+        <div class="login_btn1 center">
+          <a href='/ubic1/ubic1' style="text-decoration:none;">
+            <input class="login_btn2" id="login_button" type="submit" value="로그인">
+          </a>
+        </div>
+        <div class="login_btn1 center">
+          
+        </div>
+        <div class="login_btn1 center">
+          <a href='/ubic_signup' style="text-decoration:none;">
+            <button class="login_btn2">
+              회원가입
+            </button>
+          </a>
+        </div>
+      </div>
+    </form>
+    </div>
+  </body>
+</html>
+{% endblock %}

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content_conf %}
+{% if session['id'] == 'zenka' %}
+
+<html>
+  <head>
+    <meta charset="UTF-8"> 
+    <script type=text/javascript>
+      window.onload = function() {
+        var para = document.location.href.split("/");        
+        // alert(para);
+        const elements = document.querySelectorAll("tr");      // 1행씩 색상 반전 적용된 부분
+        change_btn_color();
+        if ( para[3] == 'ubic1' ) {
+          elements[0].style.backgroundColor = "#aed4e4";
+          elements[2].style.backgroundColor = "#aed4e4";
+          elements[21].style.backgroundColor = "#aed4e4";
+
+        } else if ( para[3] == 'ubic2' ) {
+          elements[0].style.backgroundColor = "#d3c3ff";
+          elements[2].style.backgroundColor = "#d3c3ff";
+          elements[21].style.backgroundColor = "#d3c3ff";
+          document.getElementById("bal").style.backgroundColor = "#ffffff";
+          document.getElementById("bal").style.color = "#1a2abb";
+
+        } else if ( para[3] == 'ubic3' ) {
+          elements[0].style.backgroundColor = "#e9c4bb";
+          elements[2].style.backgroundColor = "#e9c4bb";
+          elements[21].style.backgroundColor = "#e9c4bb";
+          document.getElementById("bal").style.backgroundColor = "#ffffff";
+          document.getElementById("bal").style.color = "#1a2abb";     
+        };
+        
+        var op = setInterval(function() {     // table을 갱신
+          date = new Date(); 
+          year = date.getFullYear(); 
+          month = String(date.getMonth() + 1).padStart(2, "0");
+          day = String(date.getDate()).padStart(2, "0");
+          hour = String(date.getHours()).padStart(2, "0");
+          minute = String(date.getMinutes()).padStart(2, "0");
+          second = String(date.getSeconds()).padStart(2, "0");
+          document.getElementById("now").innerHTML = year + "년" + month + "월" + day + "일 " + hour + ":" + minute + ":" + second;
+        }, 1000);
+        
+        $(".ext_text").click(function(){
+          const input_tag = $(this).parent().next().next().children();
+          //alert(input_tag.attr("class"));
+          // alert(input_tag.attr("disabled"));
+          if ( input_tag.attr("disabled") === "disabled" ){
+            input_tag.attr("disabled", false);
+            document.getElementById($(this).attr("id")).style.color = "#bb2d1a";        // 클릭 시 색 변경
+            document.getElementById($(this).attr("id")).style.fontWeight = "700";     // 클릭 시 글자 굵기 굵게
+            document.getElementById($(this).attr("id")).classList.add("blinking");     // 블링킹
+          } else {
+            input_tag.attr("disabled", true);
+            document.getElementById($(this).attr("id")).style.color = "#787777aa";      // 재클릭 시 원래색으로 변경
+            document.getElementById($(this).attr("id")).style.fontWeight = "100";     // 재클릭 시 글자 굵기 얇게
+            document.getElementById($(this).attr("id")).classList.remove("blinking");     // 블링킹 해제
+          }
+        });
+
+        $(".ext_btn").click(function(){
+          //var bt = $(this);
+          //var inp = bt.previousElementSibling();
+          // console.log($(this).parent());
+          // console.log($(this).parent().prev());
+          // console.log($(this).parent().prev().children());
+            // alert($(this).parent().prev().children().first().val());
+          
+          const input_tag = $(this).parent().prev().children().first();
+          var value = input_tag.val();
+          var idname = input_tag.attr("id");
+          var disabled = input_tag.attr("disabled")
+          // alert(value);
+          // alert(idname);
+
+          //alert(inp);
+          if ( value == "" || disabled == "disabled" ) {
+
+          } else if( value ) {
+            var x = confirm(idname + " 항목의 설정값: (( " + value + " ))을(를) 적용할까요?");            
+            if ( x ) {
+              var para = document.location.href.split("/");
+              var conf_url = "/" + para[3] + "/ubic_conf" 
+              $.ajax({
+                  url: conf_url,
+                  //headers: {'X-CSRFToken': csrftoken,},
+                  type: 'POST',
+                  //contentType: 'application/x-www-form-urlencode; charset=UTF-8',
+                  dataType: 'json',
+                  data : {
+                      data: idname, value: value,
+                  },
+                  success: function (rdata) {
+                    if( value ){
+                      if(rdata['response'] == '200'){
+                        // alert(idname + "항목에" + value + "적용완료!");
+                        alert(idname + " 항목의 설정값: (( " + value + " )) 적용완료!");
+                        document.location.href = document.location.href;      // 새로고침
+                        input_tag.val( "" );          // 입력창에 값을 지움
+                        // VL.placeholder = VL.placeholder.replace(bf, value);
+                        //$(this).parent().prev().children().first().placeholder = value;
+                      } else if(rdata['response'] == '400'){
+                        alert(idname + "항목 적용 실패!");
+                      }
+                    }                                 
+                  },
+                  error: function (rdata) {
+                      alert("ajax 통신실패");
+                      alert(rdata['text']);
+                  }
+              });
+            } else {
+              document.location.href = document.location.href;      // 새로고침
+              alert("적용 취소!")
+            }
+          } else {
+            alert("취소");
+          }
+          });
+
+        $(".ext_inp").on('keyup', function(e){
+          if ( e.key === 'Enter' || e.keyCode === 13 ) {
+            $(this).parent().next().children().first().click();
+          }
+        })
+      }   // window.on end   
+
+      function page_move(obj){
+        var para = document.location.href.split("/");
+        var url1 = "/" + para[3]
+        var url2 = "/" + para[3] + "/ubic_ear";
+        var url3 = "/" + para[3] + "/ubic_mear";
+        var url4 = "/" + para[3] + "/ubic_bal";
+        var url5 = "/" + para[3] + "/ubic_conf";
+        // alert(url5);
+        var cont_tmp = obj.innerHTML.split('<b>')[1];
+        var cont = cont_tmp.split('</b>')[0];
+        // alert(cont_tmp);
+        // alert(url2);
+        if ( cont == "자산정보" ){
+          location.href = url1;
+        } else if ( cont == "일별내역" ) {
+          location.href = url2;
+        } else if ( cont == "월별내역" ) {
+          location.href = url3;
+        } else if ( cont == "M" ) {
+          location.href = url4;
+        } else {
+          location.href = url5;
+        };
+      }
+      
+    </script>
+
+  </head>
+  <body>
+    <div class="flex-container center">      <!-- container 1s-->
+      <div class="flex-item1">
+        <a href='{{ url_for('logout') }}' style="text-decoration:none;">
+          <button class="button_up" id = "acc_logout" style="background-color:#ffffff!important; color: #1a8dbb;">
+            <p style="font-size: 0.85em; line-height:1.1px;"><b>UBiCat</b></p>
+            <p style="font-size: 0.75em; line-height:1.1px;">로그아웃</p>
+          </button>
+        </a>
+      </div>  
+      <div class="flex-item1">
+        <button class="font2 button_up" id="bal" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+            <b>자산정보</b>
+        </button>
+      </div>  
+      <div class="flex-item1" >
+        <button class="font2 button_up" id="ear" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+            <b>일별내역</b>
+        </button>
+      </div>
+      <div class="flex-item1" >
+        <button class="font2 button_up" id="mear" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+            <b>월별내역</b>
+        </button>
+      </div>
+      <div class="flex-item1" >
+        <button class="font2 button_up" id="m" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+            <b>M</b>
+        </button>
+      </div>
+    </div>      <!-- container 1e-->
+
+    <div class="flex-container3_1 center">
+      <div class="flex-item3_1 div_r">
+        <table class="table_pub">
+          <thead>
+          <tr id="conf_l">
+            <th id="conf1">
+              설정항목
+            </th>
+            <th id="conf2">
+              설정값
+            </th>
+            <th id="conf3" width="40px">
+              확인
+            </th>
+          </tr>
+        </thead>
+
+          {% for k, v in ubic_conf_.items() %}
+          {% if k == "b_money" %}
+          <thead>
+            <tr>
+              <th id= "conf_b" colspan="3">
+                <b>매수 변수 설정</b>
+              </th>
+            </tr>
+          </thead>
+          {% elif k == "ap" %}
+          <thead>
+            <tr>
+              <th id= "conf_s" colspan="3">
+                <b>매도 변수 설정</b>
+              </th>
+            </tr>
+          </thead>
+          {% endif %}
+          <tr>
+            <td class="ext_">
+              <span class="ext_text" id="{{ k }}"> {{ k }} </span>
+            </td>
+            <form class="form" onsubmit="return false;">
+              <td class="ext_">
+                {% if ((k == "adp1") or (k == "adp2") or (k == "adp3") or (k == "adp4") or (k == "adp5") or (k == "adp6") or (k == "adp7") or (k == "adp8") or (k == "adp9") or (k == "adp10")) %}
+                <input type="text" class="ext_inp" id="{{ k }}" placeholder="(- {{ v[0] }} {{ v[1] }}" disabled />
+                {% else %}
+                <input type="text" class="ext_inp" id="{{ k }}" placeholder="( {{ v[0] }} {{ v[1] }}" disabled />
+                {% endif %}
+              </td>
+            </form>
+            <td class="ext_">
+              <button class="ext_btn">확인</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+
+    {% if session['id'] == 'zenka' %}
+    <div class="flex-container4 center">      <!-- container 4s-->
+      <div class="flex-item4">
+        <a href='/ubic1/ubic_conf' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move1">
+              <b>Zenky</b>
+          </button>
+        </a>
+      </div>
+      <div class="flex-item4">
+        <a href='/ubic2/ubic_conf' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move2">
+            <b>Butys</b>
+          </button>
+        </a> 
+      </div>
+      <div class="flex-item4">
+        <a href='/ubic3/ubic_conf' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move3">
+              <b>Liebe</b>
+          </button>
+        </a>
+      </div>
+    </div>      <!-- container 4e-->
+    
+    {% endif %}
+  </body>
+</html>
+{% else %}
+<script>
+  alert("잘못된 페이지입니다");
+  window.location = "/error/500";
+</script>
+{% endif %}
+{% endblock %}

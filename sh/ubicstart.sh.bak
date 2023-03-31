@@ -1,0 +1,23 @@
+echo "mycal : start~"
+/root/UBiCauto/sh/myc.sh && /root/UBiCauto/sh/myc2.sh && /root/UBiCauto/sh/myc3.sh
+echo "mycal complete"
+sleep 2s
+echo "Rotate_data : start~"
+check=`ps -ef|grep prr|wc|awk '{print $1}'`
+if [ check == 2 ];then
+ echo "RUNNING"
+else
+ /root/UBiCauto/sh/usr.sh
+ echo "prr process complete"
+fi
+sleep 2s
+echo "UBiC_Sell_limit_beta : start~"
+/root/UBiCauto/sh/uss.sh && /root/UBiCauto/sh/uss2.sh && /root/UBiCauto/sh/uss3.sh
+echo "sell process complete"
+sleep 2s
+echo "UBiC_Buy_day_beta : start~"
+/root/UBiCauto/sh/usb.sh && /root/UBiCauto/sh/usb2.sh && /root/UBiCauto/sh/usb3.sh
+echo "buy process complete"
+sleep 2s
+/root/UBiCauto/sh/showp.sh
+exit 0

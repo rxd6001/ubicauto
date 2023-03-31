@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+<html>
+    <style>
+        #login_page {
+            position: absolute;
+            top: 14px;
+            left: 10px;
+        }
+    </style>
+    <div id="login_page">
+        {% if session['logged_in'] %}
+            <p>로그인 되었습니다. 환영합니다~^.^</p>
+            <br>
+            <button type="button" onclick="location.href='/logout'" style="border-radius: 5px; background-color:#ffffff!important; color: skyblue; padding: 2px 10px 2px 10px; cursor: pointer;">Logout</button>
+        {% endif %}
+    </div>
+
+</html>
+{% endblock %}

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content %}
+{% if session['id'] == 'zenka' or session['id'] == 'butysoo' or session['id'] == 'liebe' %}
+<html>
+  <head>
+    <meta charset="UTF-8"> 
+    <script type=text/javascript>
+      window.onload = function() {
+        var para = document.location.href.split("/");        
+        // alert(para);
+        const elements = document.querySelectorAll("tr");
+        change_btn_color();
+        if ( para[3] == 'ubic1' ) {
+          elements[0].style.backgroundColor = "#aed4e4";         
+        } else if ( para[3] == 'ubic2' ) {
+          elements[0].style.backgroundColor = "#d3c3ff";
+          document.getElementById("bal").style.backgroundColor = "#d3c3ff";
+          document.getElementById("acc_name").innerHTML = "&nbsp butysoo &nbsp";
+        } else if ( para[3] == 'ubic3' ) {  
+          elements[0].style.backgroundColor = "#e9c4bb";
+          document.getElementById("bal").style.backgroundColor = "#e9c4bb";
+          document.getElementById("acc_name").innerHTML = "&nbsp liebe &nbsp";
+        };
+
+        const asset_td = document.querySelectorAll(".vtd");
+        var asset_url = "/" + para[3];      // 
+        var op = setInterval(function() {     // table을 갱신
+          $.ajax({
+            url: asset_url,
+            //headers: {'X-CSRFToken': csrftoken,},
+            type: 'POST',     // 전송방식 'POST' 지정
+            //contentType: 'application/x-www-form-urlencode; charset=UTF-8',
+            dataType: 'json',     // 데이터 타입 지정
+            data : { 
+              data: "AJAX",
+            },
+
+            success: function (rdata) {
+              var arr = {0:'금일 수익', 1:'이달 수익', 2:'누적 수익', 3:'(실/평가)손익', 4:'수익률(일/월)', 5:'전체 자산', 6:'여유 금액', 7:'매수 금액', 8:'매수 비중', 9:'종목 수량', 10:'추매 횟수'}
+              for (var k in arr) {
+                // alert(k);
+                try {
+                  if ( k <= 3 || ( k > 4 && k <= 7 ) ) {
+                    asset_td[k].innerText = rdata[arr[k]] + " 원";
+                  } else if ( k == 4 || k == 8 ) {
+                    asset_td[k].innerText = rdata[arr[k]] + " %";
+                  } else if ( k == 9 ) {
+                    asset_td[k].innerText = rdata[arr[k]] + " 종목";
+                  }
+                } catch {
+
+                }
+              }
+
+            },
+            error: function (rdata) {
+                // alert("ajax 통신실패");
+                // location.href = "/"
+                location.href = location.href
+            }
+          }) // ajax 끝
+        }, 10000); // setInterval 끝
+
+        var rtime = setInterval(function() {     // table을 갱신
+          date = new Date();
+          year = date.getFullYear();
+          month = String(date.getMonth() + 1).padStart(2, "0");
+          day = String(date.getDate()).padStart(2, "0");
+          hour = String(date.getHours()).padStart(2, "0");
+          minute = String(date.getMinutes()).padStart(2, "0");
+          second = String(date.getSeconds()).padStart(2, "0");
+          document.getElementById("now").innerHTML = year + "년" + month + "월" + day + "일 " + hour + ":" + minute + ":" + second;
+        }, 1000)
+      }
+
+      function page_move(obj){
+        var para = document.location.href.split("/");
+        var url1 = "/" + para[3]
+        var url2 = "/" + para[3] + "/ubic_ear";
+        var url3 = "/" + para[3] + "/ubic_mear";
+        var url4 = "/" + para[3] + "/ubic_bal";
+        var url5 = "/" + para[3] + "/ubic_conf";
+        var url6 = "/" + para[3] + "/ubic_reps";
+        var url7 = "/" + para[3] + "/ubic_hty";
+
+          if ( obj == "bal" ){
+          location.href = url1;
+        } else if ( obj == "ear" ) {
+          location.href = url2;
+        } else if ( obj == "mear" ) {
+          location.href = url3;
+        } else if ( obj == "m" ) {
+          location.href = url4;
+        } else if ( obj == "config" ) {
+          location.href = url5;      
+        } else if ( obj == "reps" ) {
+          location.href = url6;
+        } else if ( obj == "hty" ) {
+          location.href = url7;
+        }
+      }
+
+      </script>
+  </head>
+
+  <body>
+    <div class="flex-container center">      <!-- container 1s-->
+      <div class="flex-item1">
+        <a href='{{ url_for('logout') }}' style="text-decoration:none;">
+          <button class=" button_up" id = "acc_logout" style="background-color:#ffffff!important; color: #1a8dbb;">
+            <p style="font-size: 0.85em; line-height:1.1px;"><b>UBiCat</b></p>
+            <p style="font-size: 0.75em; line-height:1.1px;">로그아웃</p>
+          </button>
+        </a>
+      </div>
+      <div class="flex-item1">
+        <button class="font2 button_up" id="bal" onclick="page_move(this.id);" style="background-color:#aed4e4!important; color: #ffffff;">
+            <b>자산정보</b>
+        </button>
+      </div>  
+      <div class="flex-item1">
+        <button class="font2 button_up" id="ear" onclick="page_move(this.id);" style="background-color:#ffffff!important; color: #1a2abb;">
+            <b>일별내역</b>
+        </button>
+      </div>
+      <div class="flex-item1">
+        <button class="font2  button_up" id="mear" onclick="page_move(this.id);" style="background-color:#ffffff!important; color: #1a2abb;">
+            <b>월별내역</b>
+        </button>
+      </div>
+      <div class="flex-item1">
+        {% if session['id'] == 'zenka' or session['id'] == 'butysoo' or session['id'] == 'liebe' %}
+        <button class="font2 button_up" id="m" onclick="page_move(this.id);" style="background-color:#ffffff!important; color: #1a2abb;">
+        {% else %}
+        <button class="font2 button_up" id="m" style="background-color:#ffffff!important; color: #1a2abb;">
+        {% endif %}
+            <b>M</b>
+        </button>
+      </div>
+    </div>      <!-- container 1e-->
+
+    <div class="flex-container2 center">      <!-- container 2s -->
+      {% if session['id'] == 'zenka' %}
+        <!-- <span id="rep" onclick="rep();" style="font-size: 1.4em; color: #e08f85;" >◇&nbsp;&nbsp;</span> -->
+        <span class="blinking" id="reps" style="font-size: 1.8em; color: #e08f85;" onclick="page_move(this.id);" >♽&nbsp;</span>
+      {% else %}
+        <span class="blinking" id="reps" style="font-size: 1.8em; color: #e08f85;" >♽&nbsp;</span>
+      {% endif %}
+        <b id="acc_name" style="font-size: 1.6em; color: #468a57d0;">&nbsp; zekny&nbsp; </b>
+        <b style="font-size: 1.4em; color: #000000a9;"> 자산 정보 &nbsp;&nbsp;</b> 
+      {% if session['id'] == 'zenka' %}
+        <span id="config" style="color: #3445e1; font-size: 1.8em;" onclick="page_move(this.id);" >⎆&nbsp;&nbsp;&nbsp;</span>
+      {% else %}
+        <span id="config" style="color: #3445e1; font-size: 1.8em;">⎆&nbsp;&nbsp;&nbsp;</span>
+      {% endif %}
+      <button class="button_thy" id="hty" style=" font-size: 0.7em;" onclick="page_move(this.id);" >거래내역</button>
+      <!-- </div> -->
+    </div>      <!-- container 2e -->
+
+    <div class="flex-container3 center">      <!-- container 3s-->
+      <div class="flex-item3 div_r">
+        <table>
+          <thead>
+          <tr id="bal_l">
+                <th id="bal_l1">목록</th>
+                <th id="bal_l2">내용</th>
+          </tr>
+          </thead>
+  
+          {% for key, value in mycalt_info.items() %}
+            {% if key in keyname1 %}
+              <tr>                
+                <td class="ktd"> {{ key }} </td>
+                <td class="vtd"> {{ value }} 원 </td>
+              </tr>
+            {% endif %}
+                    
+            {% if key in keyname2 %}
+              <tr>                  
+                <td class="ktd"> {{ key }} </td>
+                <td class="vtd"> {{ value }} % </td>                  
+              </tr>
+            {% endif %}
+  
+            {% if key == '종목 수량' %}
+              <tr>                  
+                  <td class="ktd"> {{ key }} </td>
+                  <td class="vtd"> {{ value }}  종목 </td>                  
+              </tr>
+            {% endif %}
+            {% if key == '매도 횟수' %}
+              <tr>                  
+                <td class="ktd"> {{ key }} </td>
+                <td class="vtd"> {{ value }} 회 </td>
+              </tr>
+            {% endif %}
+          {% endfor %}                  
+  
+          {% if session['id'] == 'zenka' %}
+            <tr class="addv-tr" >
+              <td class="ktd addv-td1" rowspan="2"> 추매 횟수 </td>
+              <td class="vtd addv-td2"> {{ add_cnt['추매 횟수'] }} </td>
+            </tr>
+          {% endif %}
+        </table>
+      </div>
+    </div>      <!-- container 3e-->
+
+    {% if session['id'] == 'zenka' %}
+    <div class="flex-container4 center">      <!-- container 4s-->
+      <div class="flex-item4">
+        <a href='/ubic1' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move1">
+              <b>Zenky</b>
+          </button>
+        </a>
+      </div>
+      <div class="flex-item4">
+        <a href='/ubic2' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move2">
+            <b>Butys</b>
+          </button>
+        </a> 
+      </div>
+      <div class="flex-item4">
+        <a href='/ubic3' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move3">
+              <b>Liebe</b>
+          </button>
+        </a>
+      </div>
+    </div>      <!-- container 4e-->
+
+    {% endif %}
+  </body>
+</html>
+{% else %}
+<script>
+  alert("잘못된 페이지입니다");
+  window.location = "/error/500";
+</script>
+{% endif %}
+{% endblock %}

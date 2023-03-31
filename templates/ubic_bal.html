@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content_bal %}
+{% if session['id'] == 'zenka' or session['id'] == 'butysoo' or session['id'] == 'liebe' %}
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script type=text/javascript>
+      function open_chart(obj) {
+        // var para = document.location.href.split("/");
+        
+        document.location.href = obj.id;
+      }
+
+      window.onload = function() {      // 페이지 모든 요소들이 로드되어야 실행되게 함 
+        var para = document.location.href.split("/");     //웹페이지 주소를 가져와서 "/"로 구분, para[3]: 유저아이디 구분
+
+        try {     // 예외처리
+          // alert(para);
+          // const elements = document.querySelectorAll("tr:nth-child(odd)");      // 1행씩 색상 반전 적용된 부분
+          const elements = document.querySelectorAll("tr");      // 1행씩 색상 반전 적용된 부분
+          // alert(elements);
+          change_btn_color();
+
+          if ( para[3] == 'ubic1' ) {
+            elements[0].style.backgroundColor = "#aed4e4";
+          
+          } else if ( para[3] == 'ubic2' ) {
+            elements[0].style.backgroundColor = "#d3c3ff";
+          } else if ( para[3] == 'ubic3' ) {      // ubic3 일 경우 배경 색 설정
+            elements[0].style.backgroundColor = "#e9c4bb";
+          }
+        } catch (e) {
+          alert(e);
+        }
+      
+        var renew_url = "/" + para[3] + "/ubic_bal";      // ajax를 사용해 테이블을 갱신, 새로운 페이지 생성 후 갱신
+        var op = setInterval(function() {     // table을 갱신
+          $.ajax({
+            url: renew_url,
+            // url : "/ubic1/ubic_bal",
+            //headers: {'X-CSRFToken': csrftoken,},
+            type: 'POST',     // 전송방식 'POST' 지정
+            //contentType: 'application/x-www-form-urlencode; charset=UTF-8',
+            dataType: 'html',     // 데이터 타입 지정
+            data : {
+                data: "AJAX",
+            },
+            success: function (rdata) {
+                const obj = JSON.parse(rdata);      // json 문자열 구문 분석?
+                const active_td = $(".font-red");     // 객체를 가저옴
+
+                $('#bal_table').html(obj.rtable);       // 'bal_table' 내용을 'obj.rtable' html에 적용
+
+                var elebtc = document.getElementById("btc_per");      // BTC 상황(전일대비 상승율) 버튼 id를 elebtc에 저장
+                elebtc.innerHTML = obj.BTC;     // 버튼 안의 BTC 값을 확인 후 아래 조건에 맞게 글자 적용
+                if ( obj.BTC > 1 ) {
+                  elebtc.style.color = "#d54040";
+                  elebtc.innerHTML = elebtc.innerHTML + "⬆";
+                } else if ( obj.BTC > 0 ) {
+                  elebtc.style.color = "#ff000097";
+                  elebtc.innerHTML = elebtc.innerHTML + "➚";
+                } else if ( obj.BTC == 0 ) {
+                  elebtc.style.color = "#030303b8";
+                  elebtc.innerHTML = elebtc.innerHTML + "⇿";
+                } else if ( obj.BTC < -1 ) {
+                  elebtc.style.color = "blue";
+                  elebtc.innerHTML = elebtc.innerHTML + "⬇";
+                } else if ( obj.BTC < 0 ) {
+                  elebtc.style.color = "#0000ff96";
+                  elebtc.innerHTML = elebtc.innerHTML + "➘";
+                } else {
+                  elebtc.style.color = "black";
+                };
+
+                $(".coin_n").click(function(){      // 코인이름 클릭 시 '매도, 추매' 버튼 활성화 or 비활성화 적용
+                const input_tag_a = $(this).parent().parent().prev().prev().prev().children().children().first();     // id:'ext_add'
+                const input_tag_b = $(this).parent().parent().prev().prev().children().children().first();     // id:'ext_buy'
+                const input_tag_s = $(this).parent().parent().prev().children().children().first();     // id:'ext_sell'
+                const button_b = $(this).parent().parent().next().next().next().children().first();     // 'sell button'
+                const button_s = $(this).parent().parent().next().children().first();     // 'buy button'
+                const add_num = $(this).parent().parent().next().next().next().next().next().children().first();
+                // alert(add_num.attr("disabled"))
+
+                if ( button_b.attr("disabled") === "disabled" || button_s.attr("disabled") === "disabled" ) {
+                  button_b.attr("disabled", false);
+                  button_s.attr("disabled", false);
+                } else {
+                  button_b.attr("disabled", true);
+                  button_s.attr("disabled", true);
+                }
+
+                if ( add_num.attr("disabled") === "disabled") {
+                  add_num.attr("disabled", false);
+                } else {
+                  add_num.attr("disabled", true);
+                }
+
+                const tag_s = $(this);
+                  // alert(document.getElementById(tag_s.attr("id")).classList[1]);
+                  if ( input_tag_s.attr("disabled") === "disabled" ) {      // 클릭 시 tag_s 속성이 'disabled'이면 class명 변경
+                    // tag_s.css("color", "#bb2d1a")
+                    // alert(tag_s.attr("id"));
+                    document.getElementById(tag_s.attr("id")).classList.replace("font-black", "font-red");      // class이름 'font-black'를 찾아서 'font-red' class로 변경
+                    document.getElementById(tag_s.attr("id")).classList.add("blinking");     // 블링킹
+                    input_tag_a.attr("disabled", false);      // input_tag_a 속성을 false로 변경
+                    input_tag_b.attr("disabled", false);      // input_tag_b 속성을 false로 변경
+                    input_tag_s.attr("disabled", false);      // input_tag_s 속성을 false로 변경
+                  } else {
+                    // tag_s.css("color", "#787777aa")
+                    // alert(tag_s.attr("id"));
+                    document.getElementById(tag_s.attr("id")).classList.replace("font-red", "font-black");
+                    document.getElementById(tag_s.attr("id")).classList.remove("blinking");     // 블링킹 해제
+                    input_tag_a.attr("disabled", true);
+                    input_tag_b.attr("disabled", true);
+                    input_tag_s.attr("disabled", true);
+                  }
+                });
+                // alert("x")
+                for (var k of active_td) {      // for문으로 빨간색 코인명의 값 확인 후 클릭실행
+                  var ac_td = document.getElementById("KRW-" + k.innerHTML);
+                  // alert(ac_td);
+                  ac_td.click();
+                }
+
+                try {     // 예외처리
+                  // alert(para);
+                  // const elements = document.querySelectorAll("tr:nth-child(odd)");      // 1행씩 색상 반전 적용된 부분
+                  const elements = document.querySelectorAll("tr");      // 1행씩 색상 반전 적용된 부분
+                  // alert(elements);
+                  if ( para[3] == 'ubic1' ) {
+                    elements[0].style.backgroundColor = "#aed4e4";
+                    
+                  } else if ( para[3] == 'ubic2' ) {
+                    elements[0].style.backgroundColor = "#d3c3ff";
+                  } else if ( para[3] == 'ubic3' ) {      // ubic3 일 경우 배경 색 설정
+                    elements[0].style.backgroundColor = "#e9c4bb";
+                  }
+                } catch (e) {
+                  alert(e);
+                }
+                
+                
+            },
+            error: function (rdata) {
+                // alert("ajax 통신실패");
+                location.href = location.href
+            }
+          })
+          
+        }, 1000);     // 테이블 갱신 주기
+
+        var rtime = setInterval(function() {     // table을 갱신
+          date = new Date(); 
+          year = date.getFullYear(); 
+          month = String(date.getMonth() + 1).padStart(2, "0");
+          day = String(date.getDate()).padStart(2, "0");
+          hour = String(date.getHours()).padStart(2, "0");
+          minute = String(date.getMinutes()).padStart(2, "0");
+          second = String(date.getSeconds()).padStart(2, "0");
+          document.getElementById("now").innerHTML = year + "년" + month + "월" + day + "일 " + hour + ":" + minute + ":" + second;
+        }, 1000)
+
+        $(".coin_n").click(function(){      // 코인이름 클릭 시 '매도, 추매' 버튼 활성화 or 비활성화 적용
+          const input_tag_a = $(this).parent().parent().prev().prev().prev().children().children().first();     // id:'ext_add'
+          const input_tag_b = $(this).parent().parent().prev().prev().children().children().first();     // id:'ext_buy'
+          const input_tag_s = $(this).parent().parent().prev().children().children().first();     // id:'ext_sell'
+          const button_b = $(this).parent().parent().next().next().next().children().first();     // 'sell button'
+          const button_s = $(this).parent().parent().next().children().first();     // 'buy button'
+          const add_num = $(this).parent().parent().next().next().next().next().next().children().first();
+          // alert(add_num.attr("disabled"))
+
+          if ( button_b.attr("disabled") === "disabled" || button_s.attr("disabled") === "disabled" ) {
+            button_b.attr("disabled", false);
+            button_s.attr("disabled", false);
+          } else {
+            button_b.attr("disabled", true);
+            button_s.attr("disabled", true);
+          }
+
+          if ( add_num.attr("disabled") === "disabled") {
+            add_num.attr("disabled", false);
+          } else {
+            add_num.attr("disabled", true);
+          }
+          
+        const tag_s = $(this);
+          // alert(document.getElementById(tag_s.attr("id")).classList[1]);
+          if ( input_tag_s.attr("disabled") === "disabled" ) {      // 클릭 시 tag_s 속성이 'disabled'이면 class명 변경
+            // tag_s.css("color", "#bb2d1a")
+            // alert(tag_s.attr("id"));
+            document.getElementById(tag_s.attr("id")).classList.replace("font-black", "font-red");      // class이름 'font-black'를 찾아서 'font-red' class로 변경
+            document.getElementById(tag_s.attr("id")).classList.add("blinking");     // 블링킹
+            input_tag_a.attr("disabled", false);      // input_tag_a 속성을 false로 변경
+            input_tag_b.attr("disabled", false);      // input_tag_b 속성을 false로 변경
+            input_tag_s.attr("disabled", false);      // input_tag_s 속성을 false로 변경
+          } else {
+            // tag_s.css("color", "#787777aa")
+            // alert(tag_s.attr("id"));
+            document.getElementById(tag_s.attr("id")).classList.replace("font-red", "font-black");
+            document.getElementById(tag_s.attr("id")).classList.remove("blinking");     // 블링킹 해제
+            input_tag_a.attr("disabled", true);
+            input_tag_b.attr("disabled", true);
+            input_tag_s.attr("disabled", true);
+          }
+        });
+      }
+      
+      function check_box(obj, coin_name){     // 매도제외, 추매제외 버튼 함수
+        var para = document.location.href.split("/");
+        var chk_url = "/" + para[3] + "/ubic_chk";      // 유저아이디 확인 후..코인명, 값, 체크상태를 확인 후 전송
+        // alert(obj.value + obj.checked + coin_name);
+        // alert(chk_url);
+
+        $.ajax({
+              url: chk_url,
+              //headers: {'X-CSRFToken': csrftoken,},
+              type: 'POST',
+              //contentType: 'application/x-www-form-urlencode; charset=UTF-8',
+              dataType: 'json',
+              data : {
+                  coin_name: coin_name, ext_chk: obj.value, onoff: obj.checked,
+              },
+              success: function (rdata) {
+                alert("적용완료!");                  
+              },
+              error: function (rdata) {
+                  alert("ajax 통신실패");                  
+              }
+          });
+      
+      }
+      
+      function page_move(obj){      // 버튼 클릭 시 페이지 이동
+        var para = document.location.href.split("/");
+        var url1 = "/" + para[3]
+        var url2 = "/" + para[3] + "/ubic_ear";
+        var url3 = "/" + para[3] + "/ubic_mear";
+        var url4 = "/" + para[3] + "/ubic_bal";
+        // alert(obj);
+        var cont_tmp = obj.innerHTML.split('<b>')[1];
+        var cont = cont_tmp.split('</b>')[0];
+        // alert(cont);
+        if ( cont == "자산정보" ){
+          location.href = url1;
+        } else if ( cont == "일별내역" ) {
+          location.href = url2;
+        } else if ( cont == "월별내역" ) {
+          location.href = url3;
+          
+        } else {
+          location.href = url4;
+        }        
+      }
+
+      function check_deal(nb, coin_name)          // 매수,매도 버튼 클릭 시 실행 함수
+      {
+        // var deal_cont = nb.innerHTML.split('<button>');
+        var deal_cont = nb.innerHTML;
+        if(deal_cont == "b") {
+          // var x = confirm(coin_name + " ((시장가)) 매수 할까요?(b)");
+          var x = prompt(coin_name + " ((현재가)) 매수 할까요?(b)");      // 매수금액 입력 후 매수 실행
+        } else if (deal_cont == "s") {
+          var x = confirm(coin_name + " ((현재가)) 매도 할까요?(s)");     // 확인 시 바로 매도 실행
+        }
+        //var x=prompt(coin_name +"을(를) 매도 할까요?");
+        if( x ) {
+          var para = document.location.href.split("/");
+          var deal_url = "/" + para[3] + "/ubic_deal"
+          // alert("x= " + x);
+          // var xp = x.split("/")
+          // var xp = xp[2]
+          // alert(xp)
+          $.ajax({
+              url: deal_url,
+              //headers: {'X-CSRFToken': csrftoken,},
+              type: 'POST',
+              //contentType: 'application/x-www-form-urlencode; charset=UTF-8',
+              dataType: 'json',
+              data : {
+                  data: coin_name, deal: deal_cont, money: x,
+              },
+              success: function (rdata) {
+                if(deal_cont == "b"){
+                  if(rdata['response'] == '200'){
+                    alert(coin_name + ", 현재가: (" + rdata['cp'] + ")원, " + "매수금액: (" + rdata['nb_money'] +")원 매수완료(b)");
+                  } else if(rdata['response'] == '400'){
+                    alert(coin_name + "매수실패(b)");
+                  }
+                  } else if(deal_cont == "s"){
+                    if(rdata['response'] == '200'){
+                    alert(coin_name + "매도완료(s)");
+                  } else if(rdata['response'] == '400'){
+                    alert(coin_name + "매도실패(s)");
+                  }
+                }                                 
+              },
+              error: function (rdata) {
+                  alert("ajax 통신실패");                  
+              }
+          });          
+        } else {
+          alert("취소");
+        }
+      }
+
+      function readd(coin_name) {     // addnum 재설정
+        var para = document.location.href.split("/");
+        var readd_url = "/" + para[3] + "/ubic_readd";      // 유저아이디 확인
+        // alert(rep_url);
+        // var x = confirm("(웹서버)를 재시작 할까요?");
+        const x = prompt("(( " + coin_name +" ))" + " 종목의 (매도횟수)를 입력해 주세요!")
+        // alert(coin_name)
+        if ( x ) {
+          // alert(x);
+          $.ajax({
+                url: readd_url,
+                //headers: {'X-CSRFToken': csrftoken,},
+                type: 'POST',
+                //contentType: 'application/x-www-form-urlencode; charset=UTF-8',
+                dataType: 'json',
+                data : {
+                  data: x, coin_name: coin_name,
+                },
+                success: function (rdata) {
+                  alert("적용완료!");                  
+                },
+                error: function (rdata) {
+                    alert("ajax 통신실패");
+                }
+            });
+        
+        }
+      }
+    </script>
+  </head>
+  <style>
+  </style>
+
+  <body>
+    <div class="flex-container center">      <!-- container 1s-->
+      <div class="flex-item1">
+        <a href='{{ url_for('logout') }}' style="text-decoration:none;">
+          <button class="button_up" id = "acc_logout" style="background-color:#ffffff!important; color: #1a8dbb;">
+            <p style="font-size: 0.85em; line-height:1.1px;"><b>UBiCat</b></p>
+            <p style="font-size: 0.75em; line-height:1.1px;">로그아웃</p>
+          </button>
+        </a>
+      </div>  
+      <div class="flex-item1">
+        <button class="font2 button_up" id="bal" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+          <!-- <font size="3em"> -->
+            <b>자산정보</b>
+          <!-- </font> -->
+        </button>
+      </div>  
+      <div class="flex-item1" >
+        <button class="font2 button_up" id="ear" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+          <!-- <font size="3em"> -->
+            <b>일별내역</b>
+          <!-- </font> -->
+        </button>
+      </div>
+      <div class="flex-item1" >
+        <button class="font2 button_up" id="mear" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+          <!-- <font size="3em"> -->
+            <b>월별내역</b>
+        </button>
+      </div>
+      <div class="flex-item1">
+        {% if 1 < BP %}
+          <button class="button_bal" onclick="page_move(this);">
+            <b>BTC</b><br> <span id="btc_per" style="color:#d54040;">{{BP}}&nbsp⬆</span></style> 
+          </button>
+        {% elif 0 < BP <= 1 %}          
+          <button class="button_bal" onclick="page_move(this);">
+            <b>BTC</b><br> <span id="btc_per" style="color:#ff000097;">{{BP}}&nbsp➚</span></style>
+          </button>
+        {% elif 0 == BP %}
+          <button class="button_bal" onclick="page_move(this);">
+            <b>BTC</b><br> <span id="btc_per" style="color:#1f1e1eb8;">{{BP}}&nbsp⇿</span></style>
+          </button>
+        {% elif -1 <= BP < 0 %}
+          <button class="button_bal" onclick="page_move(this);">
+            <b>BTC</b><br> <span id="btc_per" style="color:#0000ff96;">{{BP}}&nbsp➘</span></style>
+          </button>
+        {% elif BP < -1 %}
+          <button class="button_bal" onclick="page_move(this);">
+            <b>BTC</b><br> <span id="btc_per" style="color:blue;">{{BP}}&nbsp⬇</span></style>
+          </button>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="flex-container3_1 center">
+      <div class="flex-item3_1 font1 div_r">
+        <table class="table_pub" id = "bal_table">
+          <thead>
+            <tr id="table_tr">
+              <!-- <th class="th1" colspan="3"> -->
+              <th class="th1" colspan="3">
+                <b>제외</b><br><b>선택</b>
+              </th>
+              <!-- <th class="th1" colspan="4"> -->
+              <th class="th1">
+                <b>Coin</b><br><b>(종목)</b>
+              </th>
+              <th class="th1" colspan="3">
+                <b>수익률</b><br><b>(%)</b>
+              </th>
+              <th class="th1" colspan="2">
+                <b>평가손익</b><br><b>(원)</b>
+              </th>
+              <th class="th1">
+                <b>매수금액</b><br><b>(원)</b>
+              </th>
+            </tr>
+          </thead>
+          {% for m1 in my1 %}
+            <tr>
+              <td class="ext_b">      <!-- (ea) 추매제외 5 parent: t>par>par>pre>pre>pre -->
+                <label class="switch-button">
+                  {% if m1['chk_a'] == 'on' %}
+                    <input id="ext_add" type="checkbox" onclick="check_box(this, '{{ m1['Coin(종목)'] }}');" value="ext_add" checked disabled/>
+                    {% else %}
+                    <input id="ext_add" type="checkbox" onclick="check_box(this, '{{ m1['Coin(종목)'] }}');" value="ext_add" disabled/>
+                  {% endif %}
+                    <span class="onoff-switch">A</span>
+                  </label>
+              </td>
+              <td class="ext_b">      <!-- (eb) 매수제외 단계 4 parent: t>par>par>pre>pre -->
+                <label class="switch-button">
+                  {% if m1['chk_b'] == 'on' %}
+                    <input id="ext_buy" type="checkbox" onclick="check_box(this, '{{ m1['Coin(종목)'] }}');" value="ext_buy" checked disabled/>
+                    {% else %}
+                    <input id="ext_buy" type="checkbox" onclick="check_box(this, '{{ m1['Coin(종목)'] }}');" value="ext_buy" disabled/>
+                    {% endif %}
+                    <span class="onoff-switch">B</span>
+                </label>
+              </td>
+              <td class="ext_b">      <!-- (es) 매도제외 단계 3 parent: t>par>par>pre -->
+                <label class="switch-button" >
+                  {% if m1['chk_s'] == 'on' %}
+                  <input class="ext_sell" type="checkbox" onclick="check_box(this, '{{ m1['Coin(종목)'] }}');" value="ext_sell" checked disabled/>
+                  {% else %}
+                  <input class="ext_sell" type="checkbox" onclick="check_box(this, '{{ m1['Coin(종목)'] }}');" value="ext_sell" disabled/>
+                  {% endif %}
+                    <span class="onoff-switch">S</span>
+                </label>
+              </td>
+              <td class="coin_name">      <!-- 단계 2 parent: t>p>p -->
+                {% set f = m1['Coin(종목)'] %}
+                <b>     <!-- 단계 1 parent: t>p -->
+                  {% if session['id'] == 'zenka' %}
+                    <span class="coin_n font-black" id="{{ f }}">{{ f[4:] }}</span>     <!-- this: 클릭 시 시작점 -->
+                  {% else %}
+                    <span class="font-black" id="{{ f }}">{{ f[4:] }}</span>
+                  {% endif %}
+                </b>
+              </td>        
+              {% if 0 < m1['수익률(%)'] %}
+              <td class="c_deal">
+                <button onclick="check_deal(this, '{{ m1['Coin(종목)'] }}');" style="font-size: 0.8em; border-radius: 10px; background-color:#375ed5d5!important; border-color: #e07171; color: #ffffff; line-height:50%; padding: 3px 3px 3px 3px;" disabled >s</button>
+              </td>
+              <td class="c_roe">
+                <b><span style="color: #c52424ea;">{{ m1['수익률(%)'] }}</span></b>
+              </td>
+              <td class="c_deal">
+                <button onclick="check_deal(this, '{{ m1['Coin(종목)'] }}');" style="font-size: 0.8em; border-radius: 10px; background-color:#d53737d5!important; border-color: #e07171; color: #ffffff; line-height:50%; padding: 3px 3px 3px 3px;" disabled >b</button>
+              </td>
+              <td class="c_pro">
+                <b><span style="color: #c52424ea;">{{ m1['평가손익(원)'] }}</span></b>
+              </td>
+              {% elif 0 == m1['수익률(%)'] %}
+              <td class="c_deal">
+                <button onclick="check_deal(this, '{{ m1['Coin(종목)'] }}');" style="font-size: 0.7em; border-radius: 10px; background-color:#375ed5d5!important; color: #ffffff; line-height:50%; padding: 3px 3px 3px 3px;" disabled >s</button>
+              </td>
+              <td class="c_roe">
+                <span style="color: #030303d7;">{{ m1['수익률(%)'] }}</span>
+              </td>
+              <td class="c_deal">
+                <button onclick="check_deal(this, '{{ m1['Coin(종목)'] }}');" style="font-size: 0.7em; border-radius: 10px; background-color:#d53737d5!important; color: #ffffff; line-height:50%; padding: 3px 3px 3px 3px;" disabled >b</button>
+              </td>
+              <td class="c_pro">
+                <span style="color: #030303d7;">{{ m1['평가손익(원)'] }}</span>
+              </td>
+              {% else %}
+              <td class="c_deal">
+                  <button class="c_deal_btns" onclick="check_deal(this, '{{ m1['Coin(종목)'] }}');" style="font-size: 0.7em; border-radius: 10px; background-color:#375ed5d5!important; color: #ffffff; border-color: #719de0; line-height:50%; padding: 3px 3px 3px 3px;" disabled >s</button>
+              </td>
+              <td class="c_roe">  
+                <span style="color: #375ed5eb;">{{ m1['수익률(%)'] }}</span>
+              </td>
+              <td class="c_deal">
+                <button class="c_deal_btnb" onclick="check_deal(this, '{{ m1['Coin(종목)'] }}');" style="font-size: 0.7em; border-radius: 10px; background-color:#d53737d5!important; color: #ffffff; border-color: #719de0; line-height:50%; padding: 3px 3px 3px 3px;" disabled >b</button>
+              </td>
+              <td class="c_por">
+                <span style="color: #375ed5eb;">{{ m1['평가손익(원)'] }}</span>
+              </td>
+              {% endif %}
+              {% if session['id'] == 'zenka' or session['id'] == 'butysoo' or session['id'] == 'liebe' %}
+                <td class="c_add">
+                  <button id="c_add_btn" onclick="readd('{{ m1['Coin(종목)'] }}')" disabled >{{ m1['add_num'] }}</button>
+                </td>              
+              {% endif %}
+              <td class="c_bmoney">
+                {% set f = m1['Coin(종목)'] %}
+                <span style="color: #030303aa;" id="{{ f[4:] }}" onclick="open_chart(this)">{{ m1['매수금액(원)'] }}</span>
+              </td>
+            </tr>            
+          {% endfor %}
+          
+        </table>
+      </div>
+    </div>
+    {% if session['id'] == 'zenka' %}
+    <div class="flex-container4 center">      <!-- container 4s-->
+      <div class="flex-item4">
+        <a href='/ubic1/ubic_bal' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move1">
+              <b>Zenky</b>
+          </button>
+        </a>
+      </div>
+      <div class="flex-item4">
+        <a href='/ubic2/ubic_bal' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move2">
+            <b>Butys</b>
+          </button>
+        </a> 
+      </div>
+      <div class="flex-item4">
+        <a href='/ubic3/ubic_bal' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move3">
+              <b>Liebe</b>
+          </button>
+        </a>
+      </div>
+    </div>      <!-- container 4e-->
+    {% else %}
+    {% endif %}
+  </body>
+</html>
+{% else %}
+<script>
+  alert("잘못된 페이지입니다");
+  window.location = "/error/500";
+</script>
+{% endif %}
+{% endblock %}

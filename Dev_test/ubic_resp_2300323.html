@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content_reps %}
+{% if session['id'] == 'zenka' %}
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script type=text/javascript>
+      window.onload = function() {
+        var para = document.location.href.split("/");
+
+        const elements = document.querySelectorAll("tr");
+        change_btn_color();
+
+        if ( para[3] == 'ubic1' ) {
+          elements[0].style.backgroundColor = "#aed4e4";
+          
+        } else if ( para[3] == 'ubic2' ) {
+          elements[0].style.backgroundColor = "#d3c3ff";
+          document.getElementById("ear").style.backgroundColor = "#d3c3ff";
+
+        } else if ( para[3] == 'ubic3' ) {
+          elements[0].style.backgroundColor = "#e9c4bb";
+          document.getElementById("ear").style.backgroundColor = "#e9c4bb";
+        };
+
+        var op = setInterval(function() {     // table을 갱신
+          date = new Date(); 
+          year = date.getFullYear(); 
+          month = String(date.getMonth() + 1).padStart(2, "0");
+          day = String(date.getDate()).padStart(2, "0");
+          hour = String(date.getHours()).padStart(2, "0");
+          minute = String(date.getMinutes()).padStart(2, "0");
+          second = String(date.getSeconds()).padStart(2, "0");
+          document.getElementById("now").innerHTML = year + "년" + month + "월" + day + "일 " + hour + ":" + minute + ":" + second;
+        }, 1000);
+
+        var repsck_url = "/" + para[3] + "/ubic_repsck";      // 유저아이디 확인
+        var op = setInterval(function() {     // 프로세스 실행여부 체크위한 데이터 갱신
+          $.ajax({
+            url: repsck_url,
+            //headers: {'X-CSRFToken': csrftoken,},
+            type: 'POST',     // 전송방식 'POST' 지정
+            //contentType: 'application/x-www-form-urlencode; charset=UTF-8',
+            dataType: 'json',     // 데이터 타입 지정
+            data : { 
+              data: "AJAX",
+            },
+            success: function (rdata) {
+              // alert(rdata['ob_ckw'])
+              if (rdata['ob_ckw'] == true) {
+                ob_ckw = true;
+                // var td = document.querySelector("#ob_td");
+                // td.innerHTML = '<marquee behavior="alternate" scrollamount="6" style="color: #29a834eb;">≡</marquee>';
+                document.getElementById('ob_stt').checked = true;
+                document.getElementById('ob_rstt').classList.replace("obsstp", "obsstt");
+              } else {
+                ob_ckw = false;
+                document.getElementById('ob_stp').checked = true;
+                document.getElementById('ob_rstt').classList.replace("obsstt", "obsstp");
+              }
+              if (rdata['all_ckw'] == true) {
+                all_ckw = true;
+                document.getElementById('ubic_stt').checked = true;
+                document.getElementById('ubic_rstt').classList.replace("obsstp_p", "obsstt");
+                document.getElementById('ubic_rstt').classList.replace("obsstp", "obsstt");
+              } else {
+                all_ckw = false;
+                document.getElementById('ubic_stp').checked = true;
+                document.getElementById('ubic_rstt').classList.replace("obsstt", "obsstp_p");
+                document.getElementById('ubic_rstt').classList.replace("obsstp", "obsstp_p");
+              }
+              if ((rdata['prr_ckw'] == false) && (rdata['pbb_ckw'] == false) && (rdata['pss_ckw'] == false) && (rdata['myc_ckw'] == false)) {
+                all_ckw = false;
+                document.getElementById('ubic_stp').checked = true;
+                document.getElementById('ubic_rstt').classList.replace("obsstp_p", "obsstp");
+                document.getElementById('ubic_rstt').classList.replace("obsstt", "obsstp");
+              }
+              if (rdata['prr_ckw'] == true) {
+                prr_ckw = true;
+                document.getElementById('prr_stt').checked = true;
+                document.getElementById('prr_rstt').classList.replace("obsstp", "obsstt");
+              } else {
+                prr_ckw = false;
+                document.getElementById('prr_stp').checked = true;
+                document.getElementById('prr_rstt').classList.replace("obsstt", "obsstp");
+              }
+              if (rdata['wrun_ckw'] == true) {
+                wrun_ckw = true;
+                // document.getElementById('wrun_stt').checked = true;
+                // document.getElementById('wrun_rstt').classList.replace("obsstp", "obsstt");
+              } else {
+                wrun_ckw = false;
+                // document.getElementById('wrun_stp').checked = true;
+                // document.getElementById('wrun_rstt').classList.replace("obsstt", "obsstp");
+              }
+              if (rdata['pbb_ckw'] == true) {
+                pbb_ckw = true;
+                document.getElementById('pbb_stt').checked = true;
+                document.getElementById('pbb_rstt').classList.replace("obsstp", "obsstt");
+              } else {
+                pbb_ckw = false;
+                document.getElementById('pbb_stp').checked = true;
+                document.getElementById('pbb_rstt').classList.replace("obsstt", "obsstp");
+              }
+              if (rdata['pss_ckw'] == true) {
+                pss_ckw = true;
+                document.getElementById('pss_stt').checked = true;
+                document.getElementById('pss_rstt').classList.replace("obsstp", "obsstt");
+              } else {
+                pss_ckw = false;
+                document.getElementById('pss_stp').checked = true;
+                document.getElementById('pss_rstt').classList.replace("obsstt", "obsstp");
+              }
+              if (rdata['myc_ckw'] == true) {
+                myc_ckw = true;
+                document.getElementById('myc_stt').checked = true;
+                document.getElementById('myc_rstt').classList.replace("obsstp", "obsstt");
+              } else {
+                myc_ckw = false;
+                document.getElementById('myc_stp').checked = true;
+                document.getElementById('myc_rstt').classList.replace("obsstt", "obsstp");
+              }
+              // alert(ob_ckw)
+            },
+            error: function (rdata) {
+              // alert("ajax 통신실패");
+              location.href = location.href
+            }
+          }) // ajax 끝
+        }, 3000); // setInterval 끝
+
+      }
+      function page_move(obj){
+        var para = document.location.href.split("/");
+        var url1 = "/" + para[3]
+        var url2 = "/" + para[3] + "/ubic_ear";
+        var url3 = "/" + para[3] + "/ubic_mear";
+        var url4 = "/" + para[3] + "/ubic_bal";
+        // alert(obj);
+        var cont_tmp = obj.innerHTML.split('<b>')[1];
+        var cont = cont_tmp.split('</b>')[0];
+        // alert(cont);
+        if ( cont == "자산정보" ){
+          location.href = url1;
+        } else if ( cont == "일별내역" ) {
+          location.href = url2;
+        } else if ( cont == "월별내역" ) {
+          location.href = url3;
+        } else {
+          location.href = url4;
+        }        
+      }
+
+      function reps(obj, coin_name){     // 프로세스 재실행
+        var para = document.location.href.split("/");
+        var reps_url = "/" + para[3] + "/ubic_reps";      // 유저아이디 확인
+        const proc_name = $("#" + obj).parent().parent().children(0).first().text();
+        const cmdh = obj.split('_')[0];
+        const cmdb = obj.split('_')[1];
+        alert(obj);
+        alert(coin_name);
+        // alert(reps_url);
+
+        // alert(obj.split('_')[0], obj.split('_')[1]);
+        if (cmdb == "rstt") {
+          var x = confirm(proc_name + " 프로세스를 재실행 할까요? ");
+        } else if (cmdb == "stt") {
+          var x = confirm(proc_name + " 프로세스를 실행 할까요? ");
+        } else if (cmdb == "stp") {
+          var x = confirm(proc_name + " 프로세스를 정지 할까요? ");
+        } else if (cmdb == "expr") {
+          var x = confirm(coin_name + " 를 삭제 할까요? ");
+        } else if (cmdb == "expa") {
+          var x = prompt("추가할 종목을 입력해 주세요!","KRW-");
+        }
+
+        if ( x ) {
+          $.ajax({
+                url: reps_url,
+                //headers: {'X-CSRFToken': csrftoken,},
+                type: 'POST',
+                //contentType: 'application/x-www-form-urlencode; charset=UTF-8',
+                dataType: 'json',
+                data : {
+                  cmdh: cmdh, cmdb: cmdb, xdata: x, cndata: coin_name
+                },
+                success: function (rdata) {
+                    if ( cmdb == "rstt" ) {
+                      alert("재실행 완료!");
+                    } else if ( cmdb == "stt") {
+                      alert("실행 완료!");
+                    } else if ( cmdb == "stp") {
+                      alert("정지 완료!");
+                    } else if ( cmdb == "expr") {
+                      alert(coin_name + " 삭제 완료!");
+                    } else if ( cmdb == "expa") {
+                      alert(coin_name + " 추가 완료!");
+                    }
+                },
+                error: function (rdata) {
+                    alert("ajax 통신실패");
+                }
+            });
+        
+        } else {
+            alert("취소!")
+        }
+      }
+    </script>
+  </head>
+
+  <style>
+  </style>
+
+  <body>
+    <div class="flex-container center">      <!-- container 1s-->
+      <div class="flex-item1">
+        <a href='{{ url_for('logout') }}' style="text-decoration:none;">
+          <button class=" button_up" id = "acc_logout" style="background-color:#ffffff!important; color: #1a8dbb;">
+            <p style="font-size: 0.85em; line-height:1.1px;"><b>UBiCat</b></p>
+            <p style="font-size: 0.75em; line-height:1.1px;">로그아웃</p>
+          </button>
+        </a>
+      </div>  
+      <div class="flex-item1">
+        <button class="font2 button_up" id="bal" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+            <b>자산정보</b>
+        </button>
+      </div>  
+      <div class="flex-item1" >
+        <button class="font2 button_up" id="ear" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+            <b>일별내역</b>
+        </button>
+      </div>
+      <div class="flex-item1" >
+        <button class="font2 button_up" id="mear" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+            <b>월별내역</b>
+        </button>
+      </div>
+      <div class="flex-item1" >
+        {% if session['id'] == 'zenka' %}
+        <button class="font2 button_up" id="m" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+        {% else %}
+        <button class="font2 button_up" id="m" style="background-color:#ffffff!important; color: #1a2abb;">
+        {% endif %}
+            <b>M</b>
+        </button>
+      </div>
+    </div>      <!-- container 1e-->
+
+    <div class="flex-container3_2 center">
+      <div class="flex-item3_1 font1 div_r">
+        <table>
+          <tr>
+            <th class="pro_n">
+                프로세스
+            </th>
+            <th class="pro_n">
+                재실행
+            </th>
+            <th class="pro_n">
+                실행
+            </th>
+            <th class="pro_n">
+                정지
+            </th>
+          </tr>
+          {% if ob_ckw == True %}
+            <tr>
+              <td>감시</td>
+              <td id="ob_td">
+                  <button class="obsstt" id="ob_rstt" name="ch_ob" > ♻ </button>
+                  <!-- <marquee behavior="alternate" scrollamount="6" style="color: #29a834eb;">≡</marquee> -->
+              </td>
+              <td>
+                  <input type="radio" id="ob_stt" name= "ch_ob" onclick="reps(this.id)" checked />
+              </td>
+              <td>
+                  <input type="radio" id="ob_stp" name= "ch_ob" onclick="reps(this.id)" />
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td>감시</td>
+              <td id="ob_td">
+                  <button class="obsstp" id="ob_rstt" name="ch_ob" > ♻ </button>
+                  <!-- <marquee behavior="alternate" scrollamount="6" style="color: #29a834eb;">≡</marquee> -->
+              </td>
+              <td>
+                  <input type="radio" id="ob_stt" name= "ch_ob" onclick="reps(this.id)" />
+              </td>
+              <td>
+                  <input type="radio" id="ob_stp" name= "ch_ob" onclick="reps(this.id)" checked />
+              </td>
+            </tr>
+          {% endif %}
+          {% if all_ckw == True %}
+            <tr>
+              <td>𓆩 전체 𓆪</td>
+              <td>
+                  <button class="obsstt" id="ubic_rstt" name= "ch_po" onclick= "reps(this.id)"> ♻ </button>
+              </td>
+              <td>
+                  <input type="radio" id="ubic_stt" name= "ch_po" onclick="reps(this.id)" checked />
+              </td>
+              <td>
+                  <input type="radio" id="ubic_stp" name= "ch_po" onclick="reps(this.id)"/>
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td>( 전체 )</td>
+              <td>
+                  <button class="obsstp_p" id="ubic_rstt" name= "ch_po" onclick= "reps(this.id)"> ♻ </button>
+              </td>
+              <td>
+                  <input type="radio" id="ubic_stt" name= "ch_po" onclick="reps(this.id)" />
+              </td>
+              <td>
+                  <input type="radio" id="ubic_stp" name= "ch_po" onclick="reps(this.id)" checked />
+              </td>
+            </tr>
+          {% endif %}
+          {% if prr_ckw == True %}
+            <tr>
+              <td>공통</td>
+              <td>
+                  <button class="obsstt" id="prr_rstt" name = "ch_prr" onclick="reps(this.id)" > ♻ </button>
+              </td>
+              <td>
+                  <input type="radio" id="prr_stt" name = "ch_prr" onclick="reps(this.id)" checked />
+              </td>
+              <td>
+                  <input type="radio" id="prr_stp" name = "ch_prr" onclick="reps(this.id)" />
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td>공통</td>
+              <td>
+                  <button class="obsstp" id="prr_rstt" name = "ch_prr" onclick="reps(this.id)" > ♻ </button>
+              </td>
+              <td>
+                  <input type="radio" id="prr_stt" name = "ch_prr" onclick="reps(this.id)" />
+              </td>
+              <td>
+                  <input type="radio" id="prr_stp" name = "ch_prr" onclick="reps(this.id)" checked />
+              </td>
+            </tr>
+          {% endif %}
+          {% if wrun_ckw == True %}
+            <tr>
+              <td>웹서버</td>
+              <td>
+                  <button class="obsstt" id="wrun_rstt" name = "ch_wrun" onclick="reps(this.id)" > ♻ </button>
+              </td>
+              <td>
+                  <!-- <input type="radio" id="wrun_stt" name = "ch_wrun" onclick="reps(this.id)" checked /> -->
+                  𓆩❦𓆪
+              </td>
+              <td>
+                  <!-- <input type="radio" id="wrun_stp" name = "ch_wrun" onclick="reps(this.id)" /> -->
+                  ╳
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td>웹서버</td>
+              <td>
+                  <button class="obsstp" id="wrun_rstt" name = "ch_wrun" onclick="reps(this.id)" > ♻ </button>
+              </td>
+              <td>
+                  <!-- <input type="radio" id="wrun_stt" name = "ch_wrun" onclick="reps(this.id)" checked /> -->
+              </td>
+              <td>
+                  <!-- <input type="radio" id="wrun_stp" name = "ch_wrun" onclick="reps(this.id)" /> -->
+              </td>
+            </tr>
+          {% endif %}
+          {% if pbb_ckw == True %}
+            <tr>
+              <td>매수</td>
+              <td>
+                  <button class="obsstt" id="pbb_rstt" name = "ch_pbb" onclick="reps(this.id)" > ♻ </button>
+              </td>
+              <td>
+                  <input type="radio" id="pbb_stt" name = "ch_pbb" onclick="reps(this.id)" checked />
+              </td>
+              <td>
+                  <input type="radio" id="pbb_stp" name = "ch_pbb" onclick="reps(this.id)" />
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td>매수</td>
+              <td>
+                  <button class="obsstp" id="pbb_rstt" name = "ch_pbb" onclick="reps(this.id)" > ♻ </button>
+              </td>
+              <td>
+                  <input type="radio" id="pbb_stt" name = "ch_pbb" onclick="reps(this.id)" />
+              </td>
+              <td>
+                  <input type="radio" id="pbb_stp" name = "ch_pbb" onclick="reps(this.id)" checked />
+              </td>
+            </tr>
+          {% endif %}
+          {% if pss_ckw == True %}
+            <tr>
+              <td>매도</td>
+              <td>
+                  <button class="obsstt" id="pss_rstt" name = "ch_pss" onclick="reps(this.id)" > ♻ </button>
+              </td>
+              <td>
+                  <input type="radio" id="pss_stt" name = "ch_pss" onclick="reps(this.id)" checked />
+              </td>
+              <td>
+                  <input type="radio" id="pss_stp" name = "ch_pss" onclick="reps(this.id)" />
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td>매도</td>
+              <td>
+                  <button class="obsstp" id="pss_rstt" name = "ch_pss" onclick="reps(this.id)" > ♻ </button>
+              </td>
+              <td>
+                  <input type="radio" id="pss_stt" name = "ch_pss" onclick="reps(this.id)" />
+              </td>
+              <td>
+                  <input type="radio" id="pss_stp" name = "ch_pss" onclick="reps(this.id)" checked />
+              </td>
+            </tr>
+          {% endif %}
+          {% if myc_ckw == True %}
+            <tr>
+              <td>자료생성</td>
+              <td>
+                  <button class="obsstt" id="myc_rstt" name = "ch_myc" onclick="reps(this.id)" > ♻ </button>
+              </td>
+              <td>
+                  <input type="radio" id="myc_stt" name = "ch_myc" onclick="reps(this.id)" checked />
+              </td>
+              <td>
+                  <input type="radio" id="myc_stp" name = "ch_myc" onclick="reps(this.id)" />
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td>자료생성</td>
+              <td>
+                  <button class="obsstp" id="myc_rstt" name = "ch_myc" onclick="reps(this.id)" > ♻ </button>
+              </td>
+              <td>
+                  <input type="radio" id="myc_stt" name = "ch_myc" onclick="reps(this.id)" />
+              </td>
+              <td>
+                  <input type="radio" id="myc_stp" name = "ch_myc" onclick="reps(this.id)" checked />
+              </td>
+            </tr>
+          {% endif %}
+        </table>
+      </div>
+    </div>
+    {% if session['id'] == 'zenka' %}
+    <div class= "flex-container3_3">
+      <div class="flex-item3_1 font1 div_r">
+        <table>
+          <tr>
+            <th class="pro_n" style="background-color:#aed4e4">
+              신규 매수 제외 종목
+            </th>
+            <th class="pro_n" style="background-color:#aed4e4">
+              항목제거
+            </th>
+            <th class="pro_n" style="background-color:#aed4e4">
+              <button id=exp_expa onclick="reps(this.id)" style="font-size: 1em; border-radius: 15px; background-color:#375ed5d5!important; border-color: #ffffff; color: #ffffff; line-height:60%; padding: 4px 4px 4px 4px;" >추가</button>
+            </th>
+          </tr>
+
+          {% for name in ext_B %}
+          <tr>
+            <td>
+              {{ name }}
+            </td>
+            <td colspan="2">
+              <button id=exp_expr onclick="reps(this.id, '{{name}}')" style="font-size: 1em; border-radius: 10px; background-color:#fb9d78d5!important; border-color: #ffffff; color: #ffffff; line-height:50%; padding: 4px 4px 4px 4px;" >삭제</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if session['id'] == 'zenka' %}
+    <div class="flex-container4 center">      <!-- container 4s-->
+      <div class="flex-item4">
+        <a href='/ubic1/ubic_reps' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move1">
+              <b>Zenky</b>
+          </button>
+        </a>
+      </div>
+      <div class="flex-item4">
+        <a href='/ubic1/ubic_reps' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move2">
+            <b>Butys</b>
+          </button>
+        </a> 
+      </div>
+      <div class="flex-item4">
+        <a href='/ubic1/ubic_reps' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move3">
+              <b>Liebe</b>
+          </button>
+        </a>
+      </div>
+    </div>      <!-- container 4e-->
+    {% endif %}
+
+  </body>
+</html>
+{% else %}
+<script>
+  alert("잘못된 페이지입니다");
+  window.location = "/error/500";
+</script>
+{% endif %}
+{% endblock %}

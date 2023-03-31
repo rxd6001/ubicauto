@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content_signup %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="Generator" content="EditPlus®">
+    <meta name="Author" content="">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <title>회원가입 양식</title>
+    <style type="text/css">
+        div.container {}
+        div.insert {}
+        div.create {
+            width: 400px;
+            text-align: center;
+            padding: 30px;
+            border-bottom: 1px solid black;
+            margin: auto;
+        }
+
+        table {
+            height: 320px;
+            width: 400px;
+            border-top: 3px solid black;
+            margin-right: auto;
+            margin-left: auto;
+        }
+        td {
+            border-bottom: 1px dotted black;
+        }
+        caption {
+            text-align: left;
+        }
+        .col1 {
+            background-color: #bfd6ada2;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.8em;
+            width: 60px;
+        }
+        .col2 {
+            text-align: left;
+            padding: 5px;
+            width: 300px;
+        }
+        .but1 {
+            height: 25px;
+            width: 80px;
+            color: #525d42ee;
+            background-color: #ffffff;
+            border-color: #a1cf7ebb;
+            border-radius: 12px; 
+        }
+        .but2 {
+            height: 27px;
+            width: 120px;
+            color: white;
+            background-color: black;
+            border-color: black;
+        }
+        .but3 {
+            height: 35px;
+            width: 150px;
+            background-color: white;
+            border-color: #929292a0;
+            border: 2px solid #585858;
+            border-radius: 12px; 
+        }
+        .but4 {
+            height: 35px;
+            width: 150px;
+            background-color: white;
+            border-color: #929292a0;
+            border: 2px solid #585858;
+            border-radius: 12px; 
+        }
+        .but1:hover {
+            background-color: #bcc8a99f;
+            color: white;
+            border: 2px solid #a1cf7ebb;
+        }
+        .but2:hover {
+            background-color: #b9b9b9;
+            color: black;
+            border: 2px solid black;
+        }
+        .but3:hover {
+            background-color: #6f75659f;
+            color: white;
+            border: 2px solid #a1cf7ebb;
+        }
+        .but4:hover {
+            background-color: #bcc8a99f;
+            color: white;
+            border: 2px solid #a1cf7ebb;
+        }
+        p {
+            font-size: 0.7em;
+        }
+        .g {
+            font-size: 0.7em;
+        }
+        .c {
+            font-size: 0.7em;
+        }
+        .a {
+            font-size: 0.7em;
+        }
+        .num {
+            color: red;
+        }
+    </style>
+    <script>
+        function formCheck(form) {
+            //유효성 검사
+            if (form.name.value == "") {
+                alert('이름을 입력하세요.');
+                form.name.focus();
+                return;
+            }
+
+            if (form.id.value == "") {
+                alert('아이디를 입력하세요.');
+                form.id.focus();
+                return;
+            }
+
+            if (form.pwd.value == "") {
+                alert('비밀번호를 입력하세요.');
+                form.pwd.focus();
+                return;
+            }
+
+            if (form.pwd.value.length < 10 || form.pwd.value.length > 16) {
+                alert('비밀번호는 10 ~ 16자 사이로 입력하세요.');
+                form.pwd.focus();
+                return;
+            }
+
+            if (form.pwdCheck.value == "") {
+                alert('비밀번호 확인을 입력하세요.');
+                form.pwdCheck.focus();
+                return;
+            }
+
+            if (form.mailid.value == "") {
+                alert('e-mail을 입력하세요.');
+                form.mailid.focus();
+                return;
+            }
+
+            if (form.mailid.value == "") {
+                alert('e-mail을 입력하세요.');
+                form.mailid.focus();
+                return;
+            }
+
+            if (form.email.value == "" && form.mailslc.selectedIndex == 0) {
+                alert('e-mail을 입력하세요.');
+                form.mailslc.focus();
+                return;
+            }
+
+            if (form.grade.selectedIndex == 0) {
+                alert('학년을 선택하세요.');
+                form.grade.focus();
+                return;
+
+            }
+
+            if (form.cls.selectedIndex == 0) {
+                alert('반을 선택하세요.');
+                form.grade.focus();
+                return;
+            }
+            alert('회원가입이 완료되었습니다.');
+            form.reset();
+        }
+    </script>
+
+</head>
+<body>
+    <form method="post" action="">
+        <div class="container">
+            <div class="insert">
+                <table>
+                    <caption>
+                        <h2>회원가입 양식</h2>
+                    </caption>
+                    <tr>
+                        <td class="col1">이름</td>
+                        <td class="col2"><input type="text" name="name" maxlength="5"></td>
+                    </tr>
+                    <tr>
+                        <td class="col1">아이디</td>
+                        <td class="col2">
+                            <input type="text" name="id" maxlength="10">
+                            <input class='but1' type="button" value="중복확인" onclick="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">비밀번호</td>
+                        <td class="col2">
+                            <input type="password" name="pwd" maxlength="16">
+                            <p>※비밀번호는 <span class="num">문자, 숫자, 특수문자(~!@#$%^&*)의 조합
+                                    10 ~ 16자리</span>로 입력이 가능합니다.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">비밀번호 확인</td>
+                        <td class="col2"><input type="password" name="pwdCheck" maxlength="16"></td>
+                    </tr>
+                    <!-- <tr>
+                        <td class="col1">이메일</td>
+                        <td class="col2">
+                            <input type="text" name="mailid">
+                            <span class="a">@</span>
+                            <input type="text" name="email">
+                            <select name="mailslc">
+                                <option value="self" selected>직접입력</option>
+                                <option value="naver">naver.com</option>
+                                <option value="gm">gmail.com</option>
+                                <option value="da">daum.com</option>
+                                <option value="yah">yahoo.com</option>
+                            </select>
+                            <input class='but2' type="button" value="이메일 중복확인" onclick="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col1">test</td>
+                        <td class="col2"><select name="grade">
+                                <option value="slc1" selected>선택</option>
+                                <option value="g1">1</option>
+                                <option value="g2">2</option>
+                                <option value="g3">3</option>
+                                <option value="g4">4</option>
+                                <option value="g5">5</option>
+                                <option value="g6">6</option>
+                            </select>
+                            <span class="g">num1</span>
+                            <select name="cls">
+                                <option value="slc2" selected>선택</option>
+                                <option value="c1">1</option>
+                                <option value="c2">2</option>
+                                <option value="c3">3</option>
+                                <option value="c4">4</option>
+                                <option value="c5">5</option>
+                            </select>
+                            <span class="c">num2</span>
+                        </td>
+                    </tr> -->
+                </table>
+            </div>
+            <div class="create">
+                <input class="but3" type="button" value="가입취소" onclick="location.href='index.html'">
+                <input class="but4" type="button" value="회원가입" onclick="location.href='index.html'">
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+{% endblock %}

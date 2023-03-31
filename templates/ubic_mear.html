@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content_mear %}
+{% if session['id'] == 'zenka' or session['id'] == 'butysoo' or session['id'] == 'liebe' %}
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <script type=text/javascript>
+      window.onload = function() {
+        var para = document.location.href.split("/");
+        // alert(para);
+        // const elements = document.querySelectorAll("tr:nth-child(even)");
+        const elements = document.querySelectorAll("tr");
+        change_btn_color();
+
+        if ( para[3] == 'ubic1' ) {
+          elements[0].style.backgroundColor = "#aed4e4";
+          
+        } else if ( para[3] == 'ubic2' ) {
+          elements[0].style.backgroundColor = "#d3c3ff";
+          document.getElementById("mear").style.backgroundColor = "#d3c3ff";
+
+        } else if ( para[3] == 'ubic3' ) {
+          elements[0].style.backgroundColor = "#e9c4bb";
+          document.getElementById("mear").style.backgroundColor = "#e9c4bb";
+        };
+
+        var rtime = setInterval(function() {     // table을 갱신
+          date = new Date(); 
+          year = date.getFullYear(); 
+          month = String(date.getMonth() + 1).padStart(2, "0");
+          day = String(date.getDate()).padStart(2, "0");
+          hour = String(date.getHours()).padStart(2, "0");
+          minute = String(date.getMinutes()).padStart(2, "0");
+          second = String(date.getSeconds()).padStart(2, "0");
+          document.getElementById("now").innerHTML = year + "년" + month + "월" + day + "일 " + hour + ":" + minute + ":" + second;
+        }, 1000);
+      }
+
+      function page_move(obj){
+        var para = document.location.href.split("/");
+        var url1 = "/" + para[3]
+        var url2 = "/" + para[3] + "/ubic_ear";
+        var url3 = "/" + para[3] + "/ubic_mear";
+        var url4 = "/" + para[3] + "/ubic_bal";
+        // alert(obj);
+        var cont_tmp = obj.innerHTML.split('<b>')[1];
+        var cont = cont_tmp.split('</b>')[0];
+        // alert(cont);
+        if ( cont == "자산정보" ){
+          location.href = url1;
+        } else if ( cont == "일별내역" ) {
+          location.href = url2;
+        } else if ( cont == "월별내역" ) {
+          location.href = url3;
+        } else {
+          location.href = url4;
+        }        
+      }
+      // 차트영역 코드
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = [];
+        data.push(['date', '수익']);
+        {% for d in c_list %}
+        {% set f = d['날짜'] %}
+        {% if f == "총 합 계" %}
+        {% else %}
+          var tmp_list = [];
+          tmp_list = ["{{ d['날짜'] }}", Number("{{ d['수익'] }}")];
+          data.push(tmp_list);
+        {% endif %}
+        {% endfor %}
+        var data = google.visualization.arrayToDataTable(data);
+        // var data = google.visualization.arrayToDataTable([
+        //   ['Year', 'Sales', 'Expenses'],
+        //   ['2004',  1000,      400],
+        //   ['2005',  1170,      460],
+        //   ['2006',  660,       1120],
+        //   ['2007',  1030,      540]
+        // ]);
+        
+        var options = {
+          title: '월별 수익 현황',     // 제목
+          titleTextStyle: {      // 타이틀 옵션
+            color: '#1a2abb',
+            fontName: 'Arial',
+            fontSize: 12,
+            bold: true,
+            italic: false,
+          },
+
+          hAxis: {textPosition: 'in'},
+          vAxis: {textPosition: 'in'},
+          chartArea: {width: '100%', height: '85%'},
+          // hAxis: { title: '날짜' },      // 세로축
+          // vAxis: { title: '금액' },      // 가로축
+          titlePosition: 'out',      // 제목 그래프안으로 넣기
+          colors :['#bb2d1a'],      // line color
+          // vAxism:{ minValue:"-1.5" },
+          pointSize: 3,     // 포인트 크기
+          pointShape: 'circle',     // 포인트 모양
+          // pointsVisible: true,
+          legendTextStyle: { color: '#1a2abb' },     // 범례 색
+          // hAxis: { color: 'orange', },
+          animation: {    //차트가뿌려질때실행될애니메이션효과
+            startup:true,
+            duration:1000,
+            easing:'linear'},
+          // annotations:{
+          //   textStyle:{
+          //   fontSize:35,
+          //   bold:false,
+          //   italic:true,
+          //   color:'#871b47',
+          //   auraColor:'#d799ae',
+          //   opacity:1.8
+          //   }},
+          // isStacked: false,
+          
+          tooltip:{textStyle:{fontSize:14},showColorCode:true},      // 라인선택 시 보이는 값(말풍선)
+          fontSize: 8,      // 폰트사이즈
+          curveType: 'function',      // 타입
+          legend: { position: 'bottom' }      // 범례, 위치
+          // hAxis: {textPosition : 'none'} // 가로축 제거
+          // vAxis: {textPosition : 'none'} // 세로축 제거
+        };
+        $(window).resize(function(){
+          drawChart1();
+          drawChart2();
+        });
+        
+        var chart = new google.visualization.LineChart(document.getElementById('chartdiv'));
+
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+
+  <style>
+
+  </style>
+
+  <body>
+    <div class="flex-container center">      <!-- container 1s-->
+      <div class="flex-item1">
+        <a href='{{ url_for('logout') }}' style="text-decoration:none;">
+          <button class="button_up" id = "acc_logout" style="background-color:#ffffff!important; color: #1a8dbb;">
+            <p style="font-size: 0.85em; line-height:1.1px;"><b>UBiCat</b></p>
+            <p style="font-size: 0.75em; line-height:1.1px;">로그아웃</p>
+          </button>
+        </a>
+      </div>  
+      <div class="flex-item1">
+        <button class="font2 button_up" id="bal" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+            <b>자산정보</b>
+        </button>
+      </div>  
+      <div class="flex-item1" >
+        <button class="font2 button_up" id="ear" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+            <b>일별내역</b>
+        </button>
+      </div>
+      <div class="flex-item1" >
+        <button class="font2 button_up" id="mear" onclick="page_move(this);" style="background-color:#aed4e4!important; color: #ffffff;">
+            <b>월별내역</b>
+        </button>
+      </div>
+      <div class="flex-item1" >
+        {% if session['id'] == 'zenka' or session['id'] == 'butysoo' or session['id'] == 'liebe' %}
+        <button class="font2 button_up" id="m" onclick="page_move(this);" style="background-color:#ffffff!important; color: #1a2abb;">
+        {% else %}
+        <button class="font2 button_up" id="m" style="background-color:#ffffff!important; color: #1a2abb;">
+        {% endif %}
+            <b>M</b>
+        </button>
+      </div>
+    </div>      <!-- container 1e-->
+
+    <div class="flex-container3_2 center">
+      <div class="flex-item3_2 font1 div_r">
+        <table>
+          <thead>
+            <tr>
+              <th>날짜</th>
+              <th>총자산</th>
+              <th>수익</th>
+              <th>수익률</th>
+              <th>매도수</th>
+            </tr>
+          </thead>
+        {% for d in c_list_r %}
+          <tr>
+            <td> {{ d['날짜'] }} </td>
+            <td> {{ '{0:,.0f}'.format(d['총자산']) }}원 </td>
+            <td> {{ '{0:,.0f}'.format(d['수익']) }}원 </td>
+            <td> {{ d['수익률'] | round(2) }}% </td>
+            <td> {{ d['매도수'] | int }}회 </td>
+          </tr>
+        {% endfor %}
+        </table>
+      </div>
+    </div>
+
+    <div class="flex-container3_3 flex-start">      <!-- 차트영역 -->
+      <div id="chartdiv">
+        
+      </div>
+    </div>
+    
+    {% if session['id'] == 'zenka' %}
+    <div class="flex-container4 center">      <!-- container 4s-->
+      <div class="flex-item4">
+        <a href='/ubic1/ubic_mear' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move1">
+              <b>Zenky</b>
+          </button>
+        </a>
+      </div>
+      <div class="flex-item4">
+        <a href='/ubic2/ubic_mear' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move2">
+            <b>Butys</b>
+          </button>
+        </a> 
+      </div>
+      <div class="flex-item4">
+        <a href='/ubic3/ubic_mear' style="text-decoration:none;">
+          <button class="font2 button_up" id = "acc_move3">
+              <b>Liebe</b>
+          </button>
+        </a>
+      </div>
+    </div>
+    {% endif %}
+  </body>
+</html>
+{% else %}
+<script>
+  alert("잘못된 페이지입니다");
+  window.location = "/error/500";
+</script>
+{% endif %}
+{% endblock %}

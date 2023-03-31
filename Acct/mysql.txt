@@ -1,0 +1,2 @@
+log in
+- mysql -hlocalhost -p3306 -uroot -p

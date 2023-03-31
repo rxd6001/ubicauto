@@ -1,0 +1,200 @@
+- adn_edit.py 추가
+ bsl 에러로 정상 실행 안될 시 ( f_bid0 ) 실행 (매도, 매수 안 됨)
+ adn_num에 없는 종목 추가 > 정상화
+
+- 매수 프로세스에서 매수 제외항목의 수정(제외항목 추가, 삭제)이 필요할 때
+ 파일 abscfg.py > """ 3. 새 코인 매수제외 할 항목 """ 에서 수정 필요
+ 'ext_Buy = 0' 에서 값을 '1'로 수정 후 변경하면 됨
+
+- 매수, 매도, 추매 제외항목에서 수정해도 항목이 매도되어 내자산 항목에서 제외되면 자동삭제 됨
+ 매수항목 제외 시에는 위의 매수프로세스에서 제외하는 방법 적용 필요
+
+- 웹페이지 오류
+ add_num 파일 깨짐 가끔 발생, 재 생성 후 정상
+ 
+- 현금 출금 시
+ run.py : 원금 수정,
+ mycal 일별내역 확인 후 총액에서 빼값 수정
+ 
+- 매수, 매도, 추매 제외 설정
+ ext_change.py 설정
+
+- ssl 관련사항
+    인증서 갱신 시 80번 포트 필요
+    certbot renew : 인증서 갱신
+    certbot certificates : 인증서 갱신 확인
+    /etc/letsencrypt/live/zenky.duckdns.org
+    crontab 에 있는 duck.sh는 서버ip주소 변경 시 자동 업데이트된다
+    
+- sell_count (매도1, 추매2 선택)
+    0 > 매도 및 추매 금지 (3)
+    1 > 매도 가능, 추매 가능 ()
+    2 > 매도 가능, 추매 금지 (2)
+    3 > 매도 금지, 추매 가능 (1)
+- code-server 재시작
+rcsv
+
+- 계정 파일
+Acct/members.pickle
+
+- 파일별 설명
+ - 파이썬 파일
+  UBiC_Buy.py : 종목 신규 매수
+  UBiC_Sell.py : 보유종목 매도, 추매
+  UBiC_Rotate_data.py : KWR 원화 거래 종목명 리스트, 종목 현재가.. 등 불러 옴, 기본 소스파일 생성
+  UBiC_Search_def.py : 함수 모음
+  UBiC_Check.py : 매수, 매도, 웹, 로테이트 감시 후 재실행
+  run.py : 웹서비스 실행
+  sc.py : 서버 점검 시 프로세스 정지, 실행 시간 설정 (현재 사용 안함)
+- html 파일
+ ubic_bal.html : 보유종목 리스트(수익율, 금액)
+ ubic_bal_table.html : 테이블 화면 업데이트 시 필요파일(테이블을 갱신해서 가져옴)
+ ubic_chart.html : 매수금액 클릭 시 종목 차트 띄움
+ ubic_conf.html : 관리자 설정 페이지
+ ubic_ear.html : 일별내역 페이지
+ ubic_mear.html : 월별내역 페이지
+ ubic_reps.html : 프로세스 재실행, 실행, 정지 컨트롤 페이지
+ ubic_signup.html : 로그인 페이지
+ ubic_thty.html : 거래내역 확인 페이지
+ ubic_html : 메인페이지
+ layout.thml : 레이아웃 페이지
+
+
+- 매도, 매수, 추매 제외
+/reset_data/abscfg.py
+
+- 매수종목 수량 틀릴 경우 -
+UBiC_Buy_A, UBiC_Buy_B, UBiC_Buy_C 에서 blcnt, bllcnt 라인 수정필요 ( - 제외항목수)
+
+- 수익률 제일 높은 종목 확인 -
+vns1, vns2, vns3
+
+- 수익율 제일 높은 종목 즉시매도 -
+nnss1, nnss2, nnss3
+
+-백업
+rmhty
+tar -cvf ./Backup/UBiCauto_220403.1v.tar ./UBiCauto
+
+code-server 업데이트 및 설치 시(* 추천
+)
+curl -fsSL https://code-server.dev/install.sh | sh
+
+code-server 업데이트 시
+[root@ubicauto ~/.cache]# cd code-server/
+rpm -Uvh code-server-4.1.0-amd64.rpm(업데이트버전명)
+
+설정저장
+psfg, psfg2, psfg3
+
+네트워크 ㅅㅏ용량 확인 시
+nethogs
+vnstat
+
+프로세스 실행 확인 시
+shp
+
+프로세스 정지 시
+ubicstop
+
+프로세스 시작 시
+ubicstart
+
+기타
+bbl(2,3), bsl(2,3), brl, 
+설치 시
+tar 파일 묶음을 푼 후 ubic_install.sh 실행(alias 생성)
+
+df 업데이트 안될 시 Nonetype error 발생
+/reset_data/df_reset.py 실행
+
+pip install plotly # plotly 설치
+
+pip install matplotlib # 판다스 색 넣을 때 필요
+
+pip install keyboard
+
+** 업비트 점검 시 프로그램 자동 종료 및 실행 **
+sc.py 에서 점검 시작시간 및 종료시간 설정 후 sc 실행
+수정 필요시 ksc 로 종료 후 재 실행 sc
+
+
+** 계정 추가 시  **
+UBiC_Buy_().py 파일 생성
+UBiC_Sell_().py 파일 생성
+mycal().py 파일 생성
+run.py에 함수 추가
+usb().sh, uss().sh, pbb(), pss(), usb(), uss(), kusb(), kuss() 생성
+delnh.sh 내용 추가
+ubicstart, ubicstop 내용 추가
+ubic_check.py 내용 추가
+nsell2, nsell3, nnss2, nnss3  추가 (상승종목 검색 및 자동 종목 매도 실행)
+- sh/now_sell2.sh, sh/now_sell3.sh, sh/n_s2.sh, sh/n_s3.sh
+
+vi usb3.sh
+nohup p -u /root/UBiCauto/pbb3 >/root/UBiCauto/ubiclog/nb3.log 2>&1 &
+
+ln -s /root/UBiCauto/kusb3.sh /usr/bin/kusb3
+ln -s /root/UBiCauto/kuss3.sh /usr/bin/kuss3
+
+chmod 744 kuss3.sh
+ln -s /root/UBiCauto/usb3.sh /usr/bin/usb3
+ln -s /root/UBiCauto/uss3.sh /usr/bin/uss3
+
+ln -s /root/UBiCauto/UBiC_Sell_C.py pss3
+ln -s /root/UBiCauto/UBiC_Buy_C.py pbb3
+
+대폭락 시 일괄 매도 명령
+Esell
+
+""" log path """
+
+usb log : usb
+nohup p -u /root/UBiCauto/pbb1 >/root/UBiCauto/ubiclog/nb.log 2>&1 &
+
+usb2 log : usb2
+nohup p -u /root/UBiCauto/pbb2 >/root/UBiCauto/ubiclog/nb2.log 2>&1 &
+
+uss log : uss
+nohup p -u /root/UBiCauto/pss1 1>/root/UBiCauto/ubiclog/ns.log 2>&1 &
+
+uss2 log : uss2
+nohup p -u /root/UBiCauto/pss2 1>/root/UBiCauto/ubiclog/ns2.log 2>&1 &
+
+usr log : usr
+/usr/bin/nohup p -u /root/UBiCauto/prr 1>/root/UBiCauto/ubiclog/nr.log 2>&1 &
+
+myc log : myc
+nohup p -u /root/UBiCauto/myc1 >/root/UBiCauto/ubiclog/myc.log 2>&1 &
+
+myc2 log : myc2
+nohup p -u /root/UBiCauto/myc2 >/root/UBiCauto/ubiclog/myc2.log 2>&1 &
+
+myl : my
+tail -f /root/UBiCauto/ubiclog/myc.log
+
+myl2 : my2
+tail -f /root/UBiCauto/ubiclog/myc2.log
+
+bbl : bb
+tail -f /root/UBiCauto/ubiclog/nb.log
+
+bbl2 : bb2
+tail -f /root/UBiCauto/ubiclog/nb2.log
+
+bsl : bs
+tail -f /root/UBiCauto/ubiclog/ns.log
+
+bsl2 : bs2
+tail -f /root/UBiCauto/ubiclog/ns2.log
+
+brl : br
+tail -f /root/UBiCauto/ubiclog/nr.log
+
+cre.log : crontab schedule log
+
+
+참고사항
+
+pip 22.0.3 from /usr/local/lib/python3.9/site-packages/pip (python 3.9)
+인증키 만료시 프로세스 정상실행 안 됨(Nonetype 발생)

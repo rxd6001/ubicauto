@@ -1,0 +1,625 @@
+table {     /* 전체 테이블 공통 적용 설정 */
+  width: 386px;
+  border-collapse: collapse;
+  border-radius: 1.5em;
+  /* overflow: hidden; */
+  text-align: center;
+  /* table-layout: fixed; */
+}
+thead {     /* 테이블 제목 줄 고정 적용 */
+  position:sticky;
+  top: 0;
+  z-index: 1;
+}
+.div_r {      /* 테이블 모서리 라운드 적용 */
+  border-radius: 1.5em;
+  /* overflow: scroll; */
+}
+tr {      /* 테이블 행 높이 적용 */
+  height: 36px;
+}
+th {      /* 테이블 head 설정 */
+  /* width: 30px; */
+  color: #ffffff;
+  /* border: 1px solid red; */
+}
+td {      /* 테이블 td 설정 */
+  border-bottom: 1.5px #aed4e4 solid;
+}
+
+.l_sort {      /* 테이블 td 설정 */
+  /* border-bottom: 1.5px #aed4e4 solid; */
+  text-align: left;
+}
+
+.addv-tr {     /* 자산 테이블 추매열 설정 */
+  height: 56px !important;
+}
+.addv-td1 {     /* 자산 테이블 목록 가로 길이 설정 */
+  /* min-width: 48px; */
+  width: 116px;
+}
+.addv-td2 {     /* 자산 테이블 값 설정 */
+  font-size: 0.75em !important; 
+}
+.ktd {      /* 자산 테이블 가운데 선 */
+
+  border-right: 1.5px #aed4e4 solid;
+}
+.vtd {      /* 자산 테이블 가운데 선 */
+  text-align: right;
+  padding-right: 16px;
+}
+
+.ext_text {     /* conf 설정항목 글자색 */
+  color: #787777aa;
+  font-size: 0.96em;
+  width: 10px;
+  word-break: break-all;
+}
+.ext_inp {      /* conf 입력창 길이 설정 */
+  width: 220px;
+}
+.ext_btn {      /* conf 확인 버튼 모양 설정 */
+  border-radius: 10px;
+  font-size: 0.68em;
+  border-width: 3px thin;
+  border-color: #82a4cebd;
+}
+
+.button_up {      /* 전체 버튼 상태 설정 */
+  width: 50px;
+  height: 40px;
+  line-height:110%;
+  padding: 3px 5px 3px 5px;
+  cursor: pointer;
+  border-radius: 15px;
+  outline: 0;
+  border: 0;
+}
+
+.button_bal {      /* 전체 버튼 상태 설정 */
+  width: 50px;
+  height: 40px;
+  line-height:120%;
+  padding: 2px 5px 2px 5px;
+  cursor: pointer;
+  border-radius: 15px;
+  background-color:#8db8ecbd!important;
+  color: #ffffff;
+  outline: 0;
+  border: 0;
+}
+
+.button_thy {      /* 자산정보 페이지 거래내역 버튼 설정 */
+  width: 35px;
+  height: 30px;
+  line-height:100%;
+  padding: 2px 5px 2px 5px;
+  cursor: pointer;
+  border-radius: 15px;
+  background-color:#8db8ecbd!important;
+  color: #ffffff;
+  outline: 0;
+  border: 0;
+}
+/* ----------- 일별, 월별 테이블 line 설정 e ----------- */
+
+/*----------- 종목 페이지 설정 s----------- */
+
+.ext_b {      /* 매도제외, 추매제외 버튼 셀 속성 설정 */
+  line-height: 200%;
+  width: 16px;
+  height: 20px;
+  /* border: 1px solid red; */
+}
+.coin_name {      /* 종목명 셀 속성 설정 */
+  text-align: center;
+  text-indent: 0.2em;
+  /* border: 1px solid red; */
+}
+.c_deal {     /* 매도 버튼 셀 속성 설정 */
+  width: 18px;
+  /* border: 1px solid red; */
+}
+.c_roe {      /* 수익률 셀 속성 설정 */
+  width: 42px;
+  text-align: center;
+  /* width: 48px; */
+  /* word-break:break-all; */
+}
+.c_pro {      /* 평가손익 셀 속성 적용안됨 확인 필요*/
+  /* width: 50px; */
+  text-align: center;
+  /* font-size: 0.5em; 적용안됨*/
+}
+.c_add {      /* add_num 셀 속성 */
+  width: 18px;
+  /* maxlength: 1 */
+  /* color: darkgoldenrod; */
+  /* border: 1px solid red; */
+}
+#c_add_btn {      /* 평가손익-매도횟수 셀 속성 설정 */
+  font-size: 0.85em;
+  border: 0px;
+  border-radius: 10px;
+  background-color: #f6e5da;
+  color: #375ed5eb;
+}
+.c_bmoney {     /* 매수금액 셀 속성 설정 */
+  text-align: center;
+}
+.pro_n {
+  width: 25%;
+  text-align: center;
+}
+.obsstt {      /* 프로세스 상태 (재실행 버튼) */
+  font-size: 1.2em;
+  border: 0px solid darkolivegreen;
+  border-radius: 12px;
+  /* background-color: silver; */
+  color: #29a834eb;
+  cursor: pointer;
+  -webkit-animation: rotation 2s infinite linear;
+}
+.obsstp {      /* 프로세스 상태 (재실행 버튼) */
+  font-size: 1.2em;
+  border: 0px solid darkolivegreen;
+  border-radius: 12px;
+  /* background-color: silver; */
+  color: #a84729eb;
+  cursor: pointer;
+}
+.obsstp_p {      /* 전체 프로세스 상태(부분정지) (재실행 버튼) */
+  font-size: 1.2em;
+  border: 0px solid darkolivegreen;
+  border-radius: 12px;
+  /* background-color: silver; */
+  color: #d68733eb;
+  cursor: pointer;
+  -webkit-animation: rotation 4s infinite linear;
+}
+
+/* 프로세스 관리 버튼 회전 */
+.pro_btn {      /* 자산정보 제목 > 프로세스 관리 버튼 */
+  /* font-size: 1.2em; */
+  /* border: 0px solid darkolivegreen; */
+  /* border-radius: 12px; */
+  /* background-color: silver; */
+  /* color: #d69d33eb; */
+  cursor: pointer;
+  -webkit-animation: rotation 10s infinite linear;      /* 회전 */
+}
+@-webkit-keyframes rotation {
+  from {-webkit-transform: rotate(0deg);}
+  to {-webkit-transform: rotate(359deg);}
+  }
+/* -------------------------------------------------------------- */
+
+/* 자산정보 페이지 제목 (프로세스 버튼) 깜박임 */
+.blinking {      /* 자산정보 페이지 제목 (프로세스 버튼) 깜박임 */
+  cursor: pointer;
+  -webkit-animation:blink 3s ease-in-out infinite alternate;
+  -moz-animation:blink 3s ease-in-out infinite alternate;
+  animation:blink 3s ease-in-out infinite alternate;
+}
+.blinking_bal {      /* 자산정보 페이지 제목 (프로세스 버튼) 깜박임 */
+  -webkit-animation:blink 3s ease-in-out infinite alternate;
+  -moz-animation:blink 3s ease-in-out infinite alternate;
+  animation:blink 3s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes blink{
+  50% {opacity:0;}
+  100% {opacity:1;}
+}
+@-moz-keyframes blink{
+  50% {opacity:0;}
+  100% {opacity:1;}
+}
+@keyframes blink{
+  50% {opacity:0;}
+  100% {opacity:1;}
+}
+/* ---------------------------------------------------------- */
+/* 차트 부분 */
+#chartdiv {
+  width: 100%;
+  height: 220px;
+}
+/* #controlsArea { */
+  /* width: 100%; */
+  /* height: 50px; */
+  /* padding:0px 20px 0px 0px; */
+  /* border:1px solid #c42828; */
+/* } */
+.chart {
+  width: 100%;
+  min-height: 450px;
+}
+.row {
+  margin:0 !important;
+} 
+
+/* ----------- 종목 페이지 설정 e ----------- */
+
+/* 페이지 전체 공통 레이아웃 설정 */
+
+.flex-container {     /* 상.하단버튼 컨테이너 */
+  display: flex;
+  margin-top: 36px;     /* 상단버튼 높이 위치(상단 기준) 설정 */
+  margin-left: 2px;
+  width: 390px;
+  height: 46px;
+  /* border:1px solid #c42828; */
+  border-radius: 10px;
+  /* background-color: seashell; */
+  color: black;
+}
+.flex-container2 {      /* "자산정보" 라인 컨테이너 */
+  display: flex;
+  margin: 6px;
+  width: 390px;
+  height: 30px;
+  /* border:1px solid #c42828; */
+  border-radius: 10px;
+  /* background-color: seashell; */
+  color: black;
+}
+.flex-container3 {      /* 자산정보 테이블 컨테이너 */
+  display: flex;
+  margin: 2px;
+  width: 390px;
+
+  height: 510px;
+  /* border:1px solid #c42828; */
+  border-radius: 10px;
+  /* background-color: seashell; */
+  color: black;
+  /* overflow: scroll; */
+}
+.flex-container3_1 {      /* 일별, 월별, 종목, 설정, M 테이블 컨테이너(통짜) */
+  display: flex;
+  margin: 2px;
+  width: 390px;
+  /* height: 542px; */
+  height: 550px;
+  /* height: 316px; */
+  /* border:1px solid #c42828; */
+  border-radius: 10px;
+  /* background-color: seashell; */
+  color: black;
+}
+.flex-container3_2 {      /* 일별, 월별, 종목, 설정, 프로세스(상단) 테이블 컨테이너 (월별 데이터 영역)*/
+  display: flex;
+  margin: 2px;
+  margin-bottom: 4px;
+  width: 390px;
+  /* height: 542px; */
+  height: 316px;
+  /* border:1px solid #c42828; */
+  border-radius: 10px;
+  /* background-color: seashell; */
+  color: black;
+}
+.flex-container3_3 {      /* 일별, 월별, 종목, 설정 테이블 컨테이너 (그래프 영역)*/
+  display: flex;
+  margin: 2px;
+  width: 390px;
+  /* height: 542px; */
+  height: 226px;
+  /* border:1px solid #5fbee4; */
+  border-radius: 10px;
+  /* background-color: seashell; */
+  color: black;
+}
+.flex-container3_4 {      /* 일별, 월별, 종목, 설정 테이블 컨테이너 (라인 그래프 영역)*/
+  display: flex;
+  margin: 2px;
+  margin-bottom: 4px;
+  width: 390px;
+  /* height: 542px; */
+  height: 50px;
+  /* border:1px solid #5fbee4; */
+  border-radius: 10px;
+  /* background-color: seashell; */
+  color: black;
+}
+
+.flex-container3_5 {      /* 신규 매수 제외종목 리스트 테이블 컨테이너 */
+  display: flex;
+  margin: 2px;
+  margin-bottom: 4px;
+  width: 390px;
+  /* height: 542px; */
+  height: 224px;
+  /* border:1px solid #5fbee4; */
+  border-radius: 10px;
+  /* background-color: seashell; */
+  color: black;
+  /* overflow: scroll; */
+}
+
+.flex-container4 {     /* 하단버튼 컨테이너 */
+  display: flex;
+  margin-top: 16px;
+  margin-left: 2px;
+  width: 390px;
+  height: 30px;
+  /* border:1px solid #c42828; */
+  border-radius: 10px;
+  /* background-color: seashell; */
+  color: black;
+}
+
+/* .flex-container.space-evenly{justify-content: space-evenly;} */
+/* .flex-container.space-around{justify-content: space-around;} */
+/* .flex-container.stretch{align-items: stretch;} */
+.flex-container.center{justify-content: center;}
+.flex-container.center{align-items: center;}
+
+.flex-container2.center{justify-content: center;}
+.flex-container2.center{align-items: center;}
+
+.flex-container3.center{justify-content: center;}
+.flex-container3.center{align-items: center;}
+
+.flex-container3_1.center{justify-content: center;}
+.flex-container3_1.center{align-items: center;}
+
+.flex-container3_3.center{align-items: center;}
+.flex-container3_3.stretch{align-content: stretch;}
+.flex-container3_3.flex-start{align-content: flex-start;}
+
+.flex-container4.center{justify-content: center;}
+.flex-container4.center{align-items: center;}
+
+.flex-item1 {     /* 상단버별 로그아웃 위치 및 상태 설정 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 30px;
+  margin: 1px;
+  /* line-height: 32px; */
+}
+.flex-item2 {     /* 상단버튼 자산정보, 일별, 월별 상태 설정 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 30px;
+  margin: 1px;
+  /* text-align: center; */
+  /* line-height: 26px; */
+}
+.flex-item2_1 {     /* 상단버튼 BTC 상태 설정 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 40px;
+  margin: 2px;
+  /* text-align: center; */
+}
+.flex-item3 {     /* 테이블 상태 설정 */
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  width: 390px;
+  height: 510px;
+  margin: 2px;
+  /* text-align: center;
+  line-height: 40px; */
+  overflow: scroll;
+}
+.flex-item3_1 {     /* 일별, 월별, 종목, 설정 테이블 상태 설정 */
+  /* display: flex; */
+  /* align-items: center; */
+  justify-content: center;
+  width: 390px;
+  height: 534px;
+  margin: 2px;
+  text-align: center;
+  /* border:1px solid #c42828; */
+  
+  
+  /* line-height: 40px; */
+  overflow: scroll;
+}
+.flex-item3_2 {     /* 일별, 월별, 종목, 설정 테이블 상태 설정 (월별 데이터 영역 크기)*/
+  /* display: flex; */
+  /* align-items: center; */
+  justify-content: center;
+  width: 390px;
+  height: 314px;
+  margin: 2px;
+  text-align: center;  
+  /* line-height: 40px; */
+  overflow: scroll;
+  /* border:1px solid #c42828; */
+}
+
+.flex-item3_3 {     /* 일별, 월별, 종목, 설정 테이블 상태 설정 (월별 데이터 영역 크기)*/
+  /* display: flex; */
+  /* align-items: center; */
+  justify-content: center;
+  width: 390px;
+  height: 220px;
+  margin: 2px;
+  text-align: center;  
+  /* line-height: 40px; */
+  overflow-x: scroll;
+  /* border:1px solid #c42828; */
+}
+
+.flex-item4 {     /* 하단버턴 상태 설정 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;      /* 버튼 간격 조절(아이템 넓이) */
+  height: 28px;
+  margin: 1px;
+  /* text-align: center; */
+  /* line-height: 20px; */
+}
+.flex-item5 {     /* 하단버턴 상태 설정 */
+  display: flex;
+  /* align-items: center;
+  justify-content: center; */
+  width: 90px;      /* 버튼 간격 조절(아이템 넓이) */
+  height: 28px;
+  margin: 1px;
+  /* text-align: center; */
+  /* line-height: 20px; */
+}
+.color-red{
+  background-color: darksalmon;
+}
+.color-blue{
+  background-color: dodgerblue;
+}
+.color-seashell{
+  background-color: seashell;
+}
+.item-h{ height: 200px;}
+.font1{ font-size: 0.85em; }      /* 일별, 월별 폰트 크기 */
+.font2{ font-size: 0.94em; }     /* 상단, 하단 버튼 크기 */
+.font3{ font-size: 1.4em; }
+.font4{ font-size: 2em; }
+.font5{ font-size: 5em; }     /* 상단버튼 폰트 크기 */
+
+/* 종목 매도제외, 매수제외 체크박스 버튼 설정 */
+.switch-button {      /* 스위치 기본 상태 설정 */
+  position: relative ;
+  left: 0px;
+  top: 7px;
+  display: inline-block;
+  /* width: 20px; */
+  width: 14px;      /* 가로막대 길이 */
+  height: 4px;      /* 가로막대 두께 */
+}
+.switch-button input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.onoff-switch {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius:20px;
+  background-color: #ccc;
+  box-shadow: inset 1px 2px 1px #999;     /* 가로막대 그림자 두께 2px(가운데 값) */
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+.onoff-switch:before {      /* 스위치 작동 전 상태 설정 */
+  position: absolute;
+  content: "";
+  /* height: 9px; */
+  height: 7px;      /* 스위치 내부 레버 길이 */
+  /* width: 9px; */
+  width: 3px;     /* 스위치 내부 레버 폭 */
+  left: 2px;
+  bottom: -2px;     /* 레버 위치(가로 막대 하단 기준 */
+  background-color: #fff;
+  -webkit-transition: .3s;
+  transition: .2s;      /* 레버 이동 시간 */
+  border-radius:20px;
+  border:1px solid silver;
+}
+.switch-button input:checked + .onoff-switch {
+  background-color: #F2D522;
+  box-shadow: inset 1px 2px 1px #E3AE56;      /* 가로막대 그림자 두께 2px(가운데 값) */
+}
+.switch-button input:checked + .onoff-switch:before {
+  /* -webkit-transform: translateX(6px); */
+  -webkit-transform: translateX(6px);
+  -ms-transform: translateX(6px);
+  transform: translateX(8px);      /* 레버 우측 이동 길이(위치변경) */
+}
+.font-black { color: #000000ae; font-weight:500;}
+.font-red { color: #bb2d1a; font-weight:700}
+/* =================================================== */
+
+#rep {      /* 프로세스 재실행 버튼 적용 */
+  cursor: pointer;
+}
+#config {       /* 설정 화면 이동 적용 */
+  cursor: pointer;
+}
+
+/* 메인 페이지(layout.html) 구성 적용 --s */
+.ubtop {      /* 상단 top 라인 구성 적용 */
+  width: 100%;
+  height: 20px;
+  left: 0px;
+  line-height: 20px;
+  position: absolute;
+  top: 0px;
+  background-color: #82a4cebd;
+  /* border:1px solid #c42828; */
+  color: #fff;
+  font-size: 0.9em;
+}
+.ubbody {     /* 중간 메인화면 body 적용 */
+  /* margin-top: 6px; */
+  border: 0px solid #c42828;
+}
+.ubfooter {     /* 하단 footer 구성 적용 */
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  margin-top: 12px;
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  background-color: #82a4cebd;
+  /* border: 1px solid #c42828; */
+  color: white;
+  font-size: 0.9em;
+}
+/* ------------------------------- e */
+
+/* 로그인 페이지 구성 적용 */
+.login_sub {      /* 메인 제목 구성 */
+  margin-top: 100px;
+  height: 80px;
+  display: flex;
+  /* border: 1px solid #bb2d1a ; */
+  color: #373ad1a3;
+}
+.login {      /* 아이디, 패스워드 컨테이너 */
+  display: flex;
+  align-items: center;
+  height: 40px;
+  /* border: 1px solid #bb2d1a ; */
+  color: #373ad1a3;
+}
+.login_btn1 {     /* 로그인 버튼 구성 적용 */ 
+  display: inline-flex;
+  width: 90px;
+  height: 30px;
+}
+.login_btn2 {     /* 로그인 입력창 item 적용 */
+display: inline-flex;
+border-radius: 8px;
+background-color: white;
+color: skyblue;
+padding: 4.2px 10px 4.2px 10px;
+cursor: pointer;
+/* border: 1px solid #bb2d1a ; */
+font-size: 1em;
+}
+
+.login_sub.center{justify-content: center;}
+.login_sub.center{align-items: center;}
+.login.space-around{justify-content: space-around;}
+.login.center{justify-content: center;}
+.login.center{align-items: center;}
+.login_btn1.center{justify-content: center;}
+.login_btn1.center{align-items: center;}

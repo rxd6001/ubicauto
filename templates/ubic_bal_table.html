@@ -1,0 +1,114 @@
+<thead>
+  <tr id="table_tr">
+    <!-- <th class="th1" colspan="3"> -->
+    <th class="th1" colspan="3">
+      <b>제외</b><br><b>선택</b>
+    </th>
+    <!-- <th class="th1" colspan="4"> -->
+    <th class="th1">
+      <b>Coin</b><br><b>(종목)</b>
+    </th>
+    <th class="th1" colspan="3">
+      <b>수익률</b><br><b>(%)</b>
+    </th>
+    <th class="th1" colspan="2">
+      <b>평가손익</b><br><b>(원)</b>
+    </th>
+    <th class="th1">
+      <b>매수금액</b><br><b>(원)</b>
+    </th>
+  </tr>
+</thead>
+{% for m1 in my1 %}
+  <tr>
+    <td class="ext_b">      <!-- (ea) 추매제외 5 parent: t>par>par>pre>pre>pre -->
+      <label class="switch-button">
+        {% if m1['chk_a'] == 'on' %}
+          <input id="ext_add" type="checkbox" onclick="check_box(this, '{{ m1['Coin(종목)'] }}');" value="ext_add" checked disabled/>
+          {% else %}
+          <input id="ext_add" type="checkbox" onclick="check_box(this, '{{ m1['Coin(종목)'] }}');" value="ext_add" disabled/>
+        {% endif %}
+          <span class="onoff-switch">A</span>
+        </label>
+    </td>
+    <td class="ext_b">      <!-- (eb) 매수제외 단계 4 parent: t>par>par>pre>pre -->
+      <label class="switch-button">
+        {% if m1['chk_b'] == 'on' %}
+          <input id="ext_buy" type="checkbox" onclick="check_box(this, '{{ m1['Coin(종목)'] }}');" value="ext_buy" checked disabled/>
+          {% else %}
+          <input id="ext_buy" type="checkbox" onclick="check_box(this, '{{ m1['Coin(종목)'] }}');" value="ext_buy" disabled/>
+          {% endif %}
+          <span class="onoff-switch">B</span>
+        </label>
+      </td>
+    <td class="ext_b">      <!-- (es) 매도제외 단계 3 parent: t>par>par>pre -->
+      <label class="switch-button" >
+        {% if m1['chk_s'] == 'on' %}
+        <input class="ext_sell" type="checkbox" onclick="check_box(this, '{{ m1['Coin(종목)'] }}');" value="ext_sell" checked disabled/>
+        {% else %}
+        <input class="ext_sell" type="checkbox" onclick="check_box(this, '{{ m1['Coin(종목)'] }}');" value="ext_sell" disabled/>
+        {% endif %}
+          <span class="onoff-switch">S</span>
+      </label>
+    </td>
+    <td class="coin_name">
+      {% set f = m1['Coin(종목)'] %}
+      <b>
+        {% if session['id'] == 'zenka' %}
+          <span class="coin_n font-black" id="{{ f }}">{{ f[4:] }}</span>
+        {% else %}
+          <span class="font-black" id="{{ f }}">{{ f[4:] }}</span>
+        {% endif %}
+      </b>
+    </td>        
+    {% if 0 < m1['수익률(%)'] %}
+    <td class="c_deal">
+      <button onclick="check_deal(this, '{{ m1['Coin(종목)'] }}');" style="font-size: 0.8em; border-radius: 10px; background-color:#375ed5d5!important; border-color: #e07171; color: #ffffff; line-height:50%; padding: 3px 3px 3px 3px;" disabled >s</button>
+    </td>
+    <td class="c_roe">
+      <b><span style="color: #c52424ea;">{{ m1['수익률(%)'] }}</span></b>
+    </td>
+    <td class="c_deal">
+      <button onclick="check_deal(this, '{{ m1['Coin(종목)'] }}');" style="font-size: 0.8em; border-radius: 10px; background-color:#d53737d5!important; border-color: #e07171; color: #ffffff; line-height:50%; padding: 3px 3px 3px 3px;" disabled >b</button>
+    </td>
+    <td class="c_pro">
+      <b><span style="color: #c52424ea;">{{ m1['평가손익(원)'] }}</span></b>
+    </td>
+    {% elif 0 == m1['수익률(%)'] %}
+    <td class="c_deal">
+      <button onclick="check_deal(this, '{{ m1['Coin(종목)'] }}');" style="font-size: 0.7em; border-radius: 10px; background-color:#375ed5d5!important; color: #ffffff; line-height:50%; padding: 3px 3px 3px 3px;" disabled >s</button>
+    </td>
+    <td class="c_roe">
+      <span style="color: #030303d7;">{{ m1['수익률(%)'] }}</span>
+    </td>
+    <td class="c_deal">
+      <button onclick="check_deal(this, '{{ m1['Coin(종목)'] }}');" style="font-size: 0.7em; border-radius: 10px; background-color:#d53737d5!important; color: #ffffff; line-height:50%; padding: 3px 3px 3px 3px;" disabled >b</button>
+    </td>
+    <td class="c_pro">
+      <span style="color: #030303d7;">{{ m1['평가손익(원)'] }}</span>
+    </td>
+    {% else %}
+    <td class="c_deal">
+        <button class="c_deal_btns" onclick="check_deal(this, '{{ m1['Coin(종목)'] }}');" style="font-size: 0.7em; border-radius: 10px; background-color:#375ed5d5!important; color: #ffffff; border-color: #719de0; line-height:50%; padding: 3px 3px 3px 3px;" disabled >s</button>
+    </td>
+    <td class="c_roe">  
+      <span style="color: #375ed5eb;">{{ m1['수익률(%)'] }}</span>
+    </td>
+    <td class="c_deal">
+      <button class="c_deal_btnb" onclick="check_deal(this, '{{ m1['Coin(종목)'] }}');" style="font-size: 0.7em; border-radius: 10px; background-color:#d53737d5!important; color: #ffffff; border-color: #719de0; line-height:50%; padding: 3px 3px 3px 3px;" disabled >b</button>
+    </td>
+    <td class="c_por">
+      <span style="color: #375ed5eb;">{{ m1['평가손익(원)'] }}</span>
+    </td>
+    {% endif %}
+    {% if session['id'] == 'zenka' or session['id'] == 'butysoo' or session['id'] == 'liebe' %}
+      <td class="c_add">
+        <button id="c_add_btn" onclick="readd('{{ m1['Coin(종목)'] }}')" disabled >{{ m1['add_num'] }}</button>
+      </td>              
+    {% endif %}
+    <td class="c_bmoney">
+      {% set f = m1['Coin(종목)'] %}
+      <span style="color: #030303aa;" id="{{ f[4:] }}" onclick="open_chart(this)">{{ m1['매수금액(원)'] }}</span>
+    </td>
+  </tr>            
+{% endfor %}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content1 %}
+{% if session['id'] == 'zenka' %}
+<html>
+  <head>
+    <meta charset="UTF-8"> 
+    <title>Index</title>
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            if ("{{session['id']}}" == ""){
+                alert("올바른 경로가 아닙니다!!");
+                location.href = "/login";
+            }
+        });
+    </script>
+</head>
+<body>
+    <h4>{{session['id']}} 님 반갑습니다. 여기는 인덱스 페이지 입니다 </h4>
+    <br>
+    <a href="/admin">관리자 페이지로 이동</a><br>
+    <a href="/logout">로그아웃</a>
+</body>
+</html>
