@@ -13,3 +13,5 @@ import axios
 # f.close()                                   # 파일 닫기
 
 # upbit = pyupbit.Upbit(access, secret)      # 업비트 로그인
+
+print("test 2")
